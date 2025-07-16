@@ -8,22 +8,69 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        :root {
+            --bg-start: #2c3e50;
+            /* Dark Blue */
+            --bg-end: #34495e;
+            /* Darker Blue */
+            --card-bg: rgba(44, 62, 80, 0.95);
+            /* Darker Card */
+            --text-color: #ecf0f1;
+            /* Light Gray */
+            --heading-color: #3498db;
+            /* Blue for headings */
+            --input-border: #7f8c8d;
+            /* Gray for input borders */
+            --input-focus-border: #3498db;
+            /* Blue for input focus */
+            --primary-btn-start: #3498db;
+            /* Blue */
+            --primary-btn-end: #2980b9;
+            /* Darker Blue */
+            --result-card-bg-start: #34495e;
+            /* Dark Blue-Gray */
+            --result-card-bg-end: #2c3e50;
+            /* Dark Blue */
+            --history-item-bg: #3b5066;
+            /* Slightly lighter dark */
+            --history-item-border: #4d648d;
+            /* Even lighter dark */
+            --nav-link-color: #bdc3c7;
+            /* Light gray for nav links */
+            --nav-link-active-bg-start: #3498db;
+            /* Blue */
+            --nav-link-active-bg-end: #2980b9;
+            /* Darker Blue */
+            --feature-card-bg: rgba(44, 62, 80, 0.9);
+            /* Darker Card */
+            --alert-danger-bg: #e74c3c;
+            /* Red */
+            --alert-danger-text: #fff;
+            /* White */
+            /* Removed --start-server-btn-start/end as we will reuse primary */
         }
 
-        .main-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+
+        body {
+            background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+        }
+
+        .main-card,
+        .server-status-card,
+        .stats-card,
+        .feature-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(5px);
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .brand-logo {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(45deg, #3498db, #8e44ad);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -31,7 +78,7 @@
         }
 
         .btn-primary {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(45deg, var(--primary-btn-start), var(--primary-btn-end));
             border: none;
             border-radius: 12px;
             padding: 12px 30px;
@@ -41,27 +88,36 @@
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
         }
 
         .form-control {
             border-radius: 12px;
-            border: 2px solid #e9ecef;
+            border: 2px solid var(--input-border);
             padding: 15px 20px;
             font-size: 16px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
             transition: all 0.3s ease;
         }
 
+        .form-control::placeholder {
+            color: rgba(236, 240, 241, 0.6);
+        }
+
         .form-control:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            border-color: var(--input-focus-border);
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+            background-color: rgba(255, 255, 255, 0.15);
+            color: var(--text-color);
         }
 
         .result-card {
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            background: linear-gradient(135deg, var(--result-card-bg-start) 0%, var(--result-card-bg-end) 100%);
             border-radius: 15px;
             border: none;
             animation: slideIn 0.5s ease-out;
+            color: var(--text-color);
         }
 
         @keyframes slideIn {
@@ -77,21 +133,22 @@
         }
 
         .history-item {
-            background: #f8f9fa;
+            background: var(--history-item-bg);
             border-radius: 12px;
             transition: all 0.3s ease;
-            border: 1px solid #e9ecef;
+            border: 1px solid var(--history-item-border);
+            color: var(--text-color);
         }
 
         .history-item:hover {
-            background: #e9ecef;
+            background: #4a627e;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         .nav-tabs {
             border: none;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
             padding: 5px;
         }
@@ -99,13 +156,13 @@
         .nav-tabs .nav-link {
             border: none;
             border-radius: 10px;
-            color: #6c757d;
+            color: var(--nav-link-color);
             font-weight: 600;
             transition: all 0.3s ease;
         }
 
         .nav-tabs .nav-link.active {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(45deg, var(--nav-link-active-bg-start), var(--nav-link-active-bg-end));
             color: white;
         }
 
@@ -114,38 +171,119 @@
             height: 1.5rem;
         }
 
-        .stats-card {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        .stats-card,
+        .server-status-card {
+            color: var(--text-color);
         }
 
         .feature-card {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
+            color: var(--text-color);
         }
 
         .feature-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
-        .alert {
+        .alert-danger {
+            background-color: var(--alert-danger-bg);
+            color: var(--alert-danger-text);
             border-radius: 12px;
             border: none;
         }
 
         .btn-outline-secondary {
             border-radius: 10px;
-            border: 2px solid #6c757d;
+            border: 2px solid #7f8c8d;
+            color: #bdc3c7;
             transition: all 0.3s ease;
         }
 
         .btn-outline-secondary:hover {
-            background: #6c757d;
+            background: #7f8c8d;
+            color: white;
             transform: translateY(-2px);
+        }
+
+        /* Specific colors for text within cards */
+        .text-muted {
+            color: rgba(236, 240, 241, 0.7) !important;
+        }
+
+        .text-primary {
+            color: #3498db !important;
+        }
+
+        .text-success {
+            color: #2ecc71 !important;
+        }
+
+        .text-warning {
+            color: #f1c40f !important;
+        }
+
+        .text-info {
+            color: #3498db !important;
+        }
+
+        .text-danger {
+            color: #e74c3c !important;
+        }
+
+        .small.text-muted strong,
+        .history-item small.fw-bold.text-muted {
+            color: rgba(236, 240, 241, 0.8) !important;
+        }
+
+        .bg-white {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            /* Make inner input section dark as well */
+        }
+
+        .text-white-50 {
+            color: rgba(236, 240, 241, 0.5) !important;
+        }
+
+        .form-label.fw-bold {
+            color: var(--text-color);
+        }
+
+        /* Styles for server status buttons */
+        .btn-server-status {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            padding: 10px 20px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-server-status.btn-check-status {
+            background-color: var(--primary-btn-start);
+            /* Using primary color for consistency */
+            border: none;
+            color: white;
+        }
+
+        .btn-server-status.btn-check-status:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.3);
+            color: white;
+        }
+
+        .btn-server-status.btn-start-server {
+            background: linear-gradient(45deg, var(--primary-btn-start), var(--primary-btn-end));
+            border: none;
+            color: white;
+        }
+
+        .btn-server-status.btn-start-server:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
+            color: white;
         }
     </style>
 </head>
@@ -158,6 +296,30 @@
             </div>
             <h1 class="display-4 brand-logo mb-3">TinyURL</h1>
             <p class="lead text-white">Rút gọn URL của bạn một cách nhanh chóng và dễ dàng</p>
+        </div>
+
+        <div class="row justify-content-center mb-4">
+            <div class="col-lg-8">
+                <div class="server-status-card p-4 text-center">
+                    <h5 class="mb-3">
+                        <i class="fas fa-server me-2"></i>Tình trạng máy chủ
+                    </h5>
+                    <p class="mb-2 text-muted">Máy chủ của chúng tôi có thể tự động "ngủ" sau 15 phút không hoạt động để
+                        tiết kiệm tài nguyên. Nếu bạn thấy máy chủ đang khởi động, phiền bạn đợi máy chủ khởi động.</p>
+
+                    <button class="btn-server-status btn-check-status mt-2" onclick="checkServerStatus()"
+                        id="checkServerStatusBtn">
+                        <span id="serverStatusIcon" class="me-2"><i class="fas fa-circle text-warning"></i></span>
+                        <span id="serverStatusText">Đang khởi động máy chủ vui lòng đợi.</span>
+                    </button>
+
+                    <a href="https://link3s.onrender.com/" target="_blank"
+                        class="btn-server-status btn-start-server mt-2" id="awakenServerLink" style="display: none;">
+                        <i class="fas fa-power-off me-2"></i>Khởi động máy chủ
+                    </a>
+                    <small id="serverMessage" class="d-block mt-2 text-muted"></small>
+                </div>
+            </div>
         </div>
 
         <div class="row justify-content-center">
@@ -184,8 +346,7 @@
                                 </label>
                                 <div class="input-group">
                                     <input type="url" class="form-control" id="originalUrl"
-                                        placeholder="https://example.com/your-very-long-url"
-                                        onkeypress="handleKeyPress(event)">
+                                        placeholder="https://example.com" onkeypress="handleKeyPress(event)">
                                     <button class="btn btn-outline-secondary" type="button" onclick="clearInput()">
                                         <i class="fas fa-times"></i>
                                     </button>
@@ -322,6 +483,7 @@
         // Global variables
         let linkHistory = [];
         let isLoading = false;
+        const BACKEND_URL = 'https://link3s.onrender.com'; // Base URL for your backend
 
         // DOM elements
         const originalUrlInput = document.getElementById('originalUrl');
@@ -342,10 +504,19 @@
         const totalLinks = document.getElementById('totalLinks');
         const lastCreated = document.getElementById('lastCreated');
 
+        // Server status elements
+        const checkServerStatusBtn = document.getElementById('checkServerStatusBtn');
+        const awakenServerLink = document.getElementById('awakenServerLink'); // Changed from button to anchor
+        const serverStatusIcon = document.getElementById('serverStatusIcon');
+        const serverStatusText = document.getElementById('serverStatusText');
+        const serverMessage = document.getElementById('serverMessage');
+
+
         // Initialize
         document.addEventListener('DOMContentLoaded', function () {
             updateHistoryDisplay();
             updateStats();
+            checkServerStatus(); // Check server status on load
         });
 
         // Utility functions
@@ -383,6 +554,45 @@
             }
         }
 
+        // Server status functions
+        async function checkServerStatus() {
+            serverStatusIcon.innerHTML = '<span class="spinner-border spinner-border-sm text-info"></span>';
+            serverStatusText.textContent = 'Đang kiểm tra...';
+            checkServerStatusBtn.disabled = true;
+            awakenServerLink.style.display = 'none'; // Hide awaken link initially
+            serverMessage.textContent = '';
+
+            try {
+                // We'll still use the root URL to trigger the wake-up, or a /health if you have one.
+                // The key is to check the status code rather than just `response.ok`.
+                const response = await fetch(`${BACKEND_URL}/`, { // Changed back to /health or use any valid endpoint
+                    method: 'GET',
+                    cache: 'no-store' // Prevent caching issues
+                });
+
+                // Check for 200 OK or 302 Found (redirect often means it's waking up or routing)
+                if (response.status === 200 || response.status === 404) {
+                    serverStatusIcon.innerHTML = '<i class="fas fa-circle text-success"></i>';
+                    serverStatusText.textContent = 'Máy chủ đang hoạt động';
+                    serverMessage.textContent = 'Bạn có thể rút gọn URL ngay bây giờ.';
+                    awakenServerLink.style.display = 'none'; // Hide awaken link if active
+                } else {
+                    serverStatusIcon.innerHTML = '<i class="fas fa-circle text-danger"></i>';
+                    serverStatusText.textContent = 'Máy chủ đang ngủ';
+                    serverMessage.textContent = 'Vui lòng nhấn nút "Khởi động máy chủ" để đánh thức.';
+                    awakenServerLink.style.display = 'inline-flex'; // Show awaken link if sleeping
+                }
+            } catch (error) {
+                console.error("Lỗi khi kiểm tra trạng thái máy chủ:", error);
+                serverStatusIcon.innerHTML = '<i class="fas fa-circle text-danger"></i>';
+                serverStatusText.textContent = 'Máy chủ không phản hồi';
+                serverMessage.textContent = 'Có lỗi kết nối. Vui lòng nhấn nút "Khởi động máy chủ" để thử lại.';
+                awakenServerLink.style.display = 'inline-flex'; // Show awaken link if error
+            } finally {
+                checkServerStatusBtn.disabled = false;
+            }
+        }
+
         // Main functions
         function createShortLink() {
             const originalUrl = originalUrlInput.value.trim();
@@ -401,8 +611,7 @@
             hideError();
             resultCard.style.display = 'none';
 
-            // Thay đổi URL backend tại đây!
-            fetch('https://link4s.onrender.com/v1/public/shortlink/create', {
+            fetch(`${BACKEND_URL}/v1/public/shortlink/create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -427,13 +636,14 @@
 
                         // Update stats
                         updateStats();
+                        checkServerStatus(); // Re-check server status after successful operation
                     } else {
-                        showError(data.message || 'Có lỗi xảy ra khi tạo short link');
+                        showError(data.message || 'Có lỗi xảy ra khi tạo short link. Máy chủ có thể đang ngủ. Vui lòng thử khởi động lại máy chủ.');
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    showError('Không thể kết nối đến server. Vui lòng thử lại sau.');
+                    showError('Không thể kết nối đến server. Có thể máy chủ đang ngủ. Vui lòng nhấn "Khởi động máy chủ" để thử lại.');
                 })
                 .finally(() => {
                     setLoading(false);
@@ -526,8 +736,6 @@
 
         function copyHistoryLink(shortUrl) {
             navigator.clipboard.writeText(shortUrl).then(() => {
-                // Show success feedback
-                const Toast = new bootstrap.Toast(document.createElement('div'));
                 // Simple success feedback
                 showError('Link đã được sao chép!');
                 setTimeout(() => hideError(), 2000);

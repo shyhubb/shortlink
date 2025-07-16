@@ -5,4 +5,7 @@ import ltd.tinyurl.shortlink.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    public boolean existsByAccount(String account);
+
+    public User findByAccount(String account);
 }
