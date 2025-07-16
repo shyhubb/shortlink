@@ -3,6 +3,7 @@ package ltd.tinyurl.shortlink.dto.request;
 import lombok.Data;
 
 @Data
-public class LinkPublicRequest {
+public class CustomLinkRequest {
     private String originalLink;
+    private String customShortCode;
 }

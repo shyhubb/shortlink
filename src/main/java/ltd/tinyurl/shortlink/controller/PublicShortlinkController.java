@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
-import ltd.tinyurl.shortlink.dto.request.LinkPublicRequest;
+import ltd.tinyurl.shortlink.dto.request.LinkRequest;
 import ltd.tinyurl.shortlink.dto.response.BaseResponse;
 import ltd.tinyurl.shortlink.dto.response.CreateLinkResponse;
 import ltd.tinyurl.shortlink.service.impl.PublicShortLinkServiceImpl;
@@ -27,7 +27,7 @@ public class PublicShortlinkController {
 
     @PostMapping("/create")
     public ResponseEntity<BaseResponse<CreateLinkResponse>> createShortLink(
-            @RequestBody LinkPublicRequest linkPublicRequest,
+            @RequestBody LinkRequest linkPublicRequest,
             HttpServletRequest request) {
         String clientIp = getClientIpAddress(request);
         BaseResponse<CreateLinkResponse> baseResponse = publicShortLinkServiceImpl.generateShortLink(linkPublicRequest,

@@ -2,7 +2,7 @@ package ltd.tinyurl.shortlink.service.impl;
 
 import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
-import ltd.tinyurl.shortlink.dto.request.LinkPublicRequest;
+import ltd.tinyurl.shortlink.dto.request.LinkRequest;
 import ltd.tinyurl.shortlink.dto.response.BaseResponse;
 import ltd.tinyurl.shortlink.dto.response.CreateLinkResponse;
 import ltd.tinyurl.shortlink.entity.Link;
@@ -22,7 +22,7 @@ public class PublicShortLinkServiceImpl implements PublicShortLinkService {
     }
 
     @Override
-    public BaseResponse<CreateLinkResponse> generateShortLink(LinkPublicRequest linkPublicRequest, String clientIp) {
+    public BaseResponse<CreateLinkResponse> generateShortLink(LinkRequest linkRequest, String clientIp) {
         LocalDateTime time = LocalDateTime.now().minusHours(WebConstants.TIME_CREATE_LINK_LIMIT);
         int countLink = linkRepository.countByClientIpAndUpdateAtAfter(clientIp,
                 time);
@@ -30,7 +30,7 @@ public class PublicShortLinkServiceImpl implements PublicShortLinkService {
             return new BaseResponse<CreateLinkResponse>(WebConstants.LIMIT_CREATE_LINK_ERROR, null);
         }
 
-        String originLink = linkPublicRequest.getOriginalLink();
+        String originLink = linkRequest.getOriginalLink();
         StringBuilder shortLink = new StringBuilder();
         String shortCode = shortlinkServiceImpl.generateUrl();
         shortLink.append(WebConstants.BASE_SHORT_URL_DOMAIN + shortCode);
@@ -41,6 +41,7 @@ public class PublicShortLinkServiceImpl implements PublicShortLinkService {
         link.setShortCode(shortCode);
         link.setOriginalLink(originLink);
         link.setClientIp(clientIp);
+        link.setShortLink(shortLink.toString());
         shortlinkServiceImpl.createShortLink(link);
 
         return new BaseResponse<CreateLinkResponse>(WebConstants.BASE_SUCCESS,

@@ -17,6 +17,7 @@ public class Link {
     private Long id;
     private String originalLink;
     private String shortCode;
+    private String shortLink;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
     private String clientIp;
