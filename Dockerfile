@@ -14,10 +14,9 @@ COPY . .
 RUN mvn clean package -DskipTests
 
 # Giai đoạn Runtime: Sử dụng một image JRE nhẹ hơn để chạy ứng dụng
-# openjdk:17-jre-slim là một lựa chọn tốt hơn openjdk:17-jdk-slim
-# vì ứng dụng chỉ cần môi trường chạy (JRE) chứ không cần môi trường phát triển (JDK)
+# eclipse-temurin:17-jre-jammy là một lựa chọn tốt và đáng tin cậy cho JRE 17 slim
 # Điều này giúp giảm đáng kể kích thước image cuối cùng.
-FROM openjdk:17-jre-slim
+FROM eclipse-temurin:17-jre-jammy
 
 # Thiết lập thư mục làm việc bên trong container cho ứng dụng
 WORKDIR /app
