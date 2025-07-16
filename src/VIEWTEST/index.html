@@ -152,7 +152,6 @@
 
 <body>
     <div class="container py-5">
-        <!-- Header -->
         <div class="text-center mb-5">
             <div class="mb-3">
                 <i class="fas fa-bolt fa-3x text-warning bg-white rounded-circle p-3 shadow"></i>
@@ -161,10 +160,8 @@
             <p class="lead text-white">Rút gọn URL của bạn một cách nhanh chóng và dễ dàng</p>
         </div>
 
-        <!-- Main Content -->
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <!-- Navigation Tabs -->
                 <ul class="nav nav-tabs justify-content-center mb-4" id="mainTabs">
                     <li class="nav-item">
                         <button class="nav-link active" id="shorten-tab" data-bs-toggle="tab" data-bs-target="#shorten">
@@ -179,10 +176,8 @@
                 </ul>
 
                 <div class="tab-content">
-                    <!-- Shorten URL Tab -->
                     <div class="tab-pane fade show active" id="shorten">
                         <div class="main-card p-4">
-                            <!-- Input Form -->
                             <div class="mb-4">
                                 <label for="originalUrl" class="form-label fw-bold">
                                     <i class="fas fa-link me-2"></i>Nhập URL cần rút gọn
@@ -197,25 +192,21 @@
                                 </div>
                             </div>
 
-                            <!-- Submit Button -->
                             <button class="btn btn-primary w-100 mb-3" onclick="createShortLink()" id="submitBtn">
                                 <i class="fas fa-arrow-right me-2"></i>Rút gọn URL
                             </button>
 
-                            <!-- Reset Button -->
                             <button class="btn btn-outline-secondary w-100" onclick="resetForm()" id="resetBtn"
                                 style="display: none;">
                                 <i class="fas fa-refresh me-2"></i>Tạo link mới
                             </button>
                         </div>
 
-                        <!-- Error Alert -->
                         <div class="alert alert-danger mt-4" id="errorAlert" style="display: none;">
                             <i class="fas fa-exclamation-circle me-2"></i>
                             <span id="errorMessage"></span>
                         </div>
 
-                        <!-- Success Result -->
                         <div class="result-card mt-4 p-4" id="resultCard" style="display: none;">
                             <div class="d-flex align-items-center mb-3">
                                 <i class="fas fa-check-circle text-success me-2"></i>
@@ -240,7 +231,6 @@
                         </div>
                     </div>
 
-                    <!-- History Tab -->
                     <div class="tab-pane fade" id="history">
                         <div class="main-card p-4">
                             <div class="d-flex justify-content-between align-items-center mb-4">
@@ -254,7 +244,6 @@
                             </div>
 
                             <div id="historyContent">
-                                <!-- History items will be populated here -->
                             </div>
 
                             <div id="emptyHistory" class="text-center py-5">
@@ -268,7 +257,6 @@
             </div>
         </div>
 
-        <!-- Statistics -->
         <div class="row justify-content-center mt-5" id="statsSection" style="display: none;">
             <div class="col-lg-8">
                 <div class="stats-card p-4">
@@ -289,7 +277,6 @@
             </div>
         </div>
 
-        <!-- Features Section -->
         <div class="row justify-content-center mt-5">
             <div class="col-lg-10">
                 <h2 class="text-center text-white mb-5">Tại sao chọn TinyURL?</h2>
@@ -325,7 +312,6 @@
             </div>
         </div>
 
-        <!-- Footer -->
         <div class="text-center mt-5">
             <p class="text-white-50">© 2024 TinyURL. Tất cả quyền được bảo lưu.</p>
         </div>
@@ -415,7 +401,8 @@
             hideError();
             resultCard.style.display = 'none';
 
-            fetch('http://localhost:8080/v1/public/shortlink/create', {
+            // Thay đổi URL backend tại đây!
+            fetch('https://link7s.onrender.com/v1/public/shortlink/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
