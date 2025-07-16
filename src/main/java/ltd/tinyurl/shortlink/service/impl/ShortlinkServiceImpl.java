@@ -2,7 +2,6 @@ package ltd.tinyurl.shortlink.service.impl;
 
 import java.security.SecureRandom;
 import org.springframework.stereotype.Service;
-
 import ltd.tinyurl.shortlink.entity.Link;
 import ltd.tinyurl.shortlink.repository.LinkRepository;
 import ltd.tinyurl.shortlink.service.ShortlinkService;
@@ -30,7 +29,7 @@ public class ShortlinkServiceImpl implements ShortlinkService {
     }
 
     @Override
-    public String GenerateUrl() {
+    public String generateUrl() {
         String shortKey = "";
         int attempts = 0;
         do {
@@ -59,8 +58,13 @@ public class ShortlinkServiceImpl implements ShortlinkService {
     @Override
     public String getLink(String shortCode) {
         if (!existsByShortCode(shortCode))
-            return "hehe";
-        return linkRepository.findByShortCode(shortCode).getOriginalLink();
+            return WebConstants.SHORT_LINK_NOT_FOUND_MESSAGE;
+        return linkRepository.findByShortCode(shortCode).get().getOriginalLink();
+    }
+
+    @Override
+    public int countByClientIp(String clientIp) {
+        return linkRepository.countByClientIp(clientIp);
     }
 
 }

@@ -21,7 +21,6 @@ public class ShortlinkController {
         URI youtubeUri = new URI("https://www.youtube.com");
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(youtubeUri);
-        // Trả về ResponseEntity với mã 302 Found và header Location
         return new ResponseEntity<>(httpHeaders, HttpStatus.FOUND);
     }
 

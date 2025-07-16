@@ -16,4 +16,12 @@ public class WebConstants {
     public static final int LENGTH_KEY_URL = 6;
 
     public static final int MAX_ATTEMPTS_GENERATE_KEY = 10;
+    public static final int CREATE_LINK_LIMIT = 100;
+    public static final int TIME_CREATE_LINK_LIMIT = 24;
+    public static final String LIMIT_CREATE_LINK_ERROR = "Bạn đã đạt giới hạn tạo Shortlink.";
+
+    public static final String BASE_SUCCESS = "Success.";
+
+    // error
+    public static final String SHORT_LINK_NOT_FOUND_MESSAGE = "Không tìm thấy short link"; // Đổi tên cho rõ ràng
 }

@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TinyURL - Rút gọn URL</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .main-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .brand-logo {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 12px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .form-control {
+            border-radius: 12px;
+            border: 2px solid #e9ecef;
+            padding: 15px 20px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 15px;
+            border: none;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .history-item {
+            background: #f8f9fa;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
+        }
+
+        .history-item:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-tabs {
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 5px;
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            border-radius: 10px;
+            color: #6c757d;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tabs .nav-link.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .spinner-border {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+
+        .stats-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .alert {
+            border-radius: 12px;
+            border: none;
+        }
+
+        .btn-outline-secondary {
+            border-radius: 10px;
+            border: 2px solid #6c757d;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-secondary:hover {
+            background: #6c757d;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container py-5">
+        <!-- Header -->
+        <div class="text-center mb-5">
+            <div class="mb-3">
+                <i class="fas fa-bolt fa-3x text-warning bg-white rounded-circle p-3 shadow"></i>
+            </div>
+            <h1 class="display-4 brand-logo mb-3">TinyURL</h1>
+            <p class="lead text-white">Rút gọn URL của bạn một cách nhanh chóng và dễ dàng</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Navigation Tabs -->
+                <ul class="nav nav-tabs justify-content-center mb-4" id="mainTabs">
+                    <li class="nav-item">
+                        <button class="nav-link active" id="shorten-tab" data-bs-toggle="tab" data-bs-target="#shorten">
+                            <i class="fas fa-link me-2"></i>Rút gọn URL
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history">
+                            <i class="fas fa-history me-2"></i>Lịch sử (<span id="historyCount">0</span>)
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <!-- Shorten URL Tab -->
+                    <div class="tab-pane fade show active" id="shorten">
+                        <div class="main-card p-4">
+                            <!-- Input Form -->
+                            <div class="mb-4">
+                                <label for="originalUrl" class="form-label fw-bold">
+                                    <i class="fas fa-link me-2"></i>Nhập URL cần rút gọn
+                                </label>
+                                <div class="input-group">
+                                    <input type="url" class="form-control" id="originalUrl"
+                                        placeholder="https://example.com/your-very-long-url"
+                                        onkeypress="handleKeyPress(event)">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="clearInput()">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button class="btn btn-primary w-100 mb-3" onclick="createShortLink()" id="submitBtn">
+                                <i class="fas fa-arrow-right me-2"></i>Rút gọn URL
+                            </button>
+
+                            <!-- Reset Button -->
+                            <button class="btn btn-outline-secondary w-100" onclick="resetForm()" id="resetBtn"
+                                style="display: none;">
+                                <i class="fas fa-refresh me-2"></i>Tạo link mới
+                            </button>
+                        </div>
+
+                        <!-- Error Alert -->
+                        <div class="alert alert-danger mt-4" id="errorAlert" style="display: none;">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            <span id="errorMessage"></span>
+                        </div>
+
+                        <!-- Success Result -->
+                        <div class="result-card mt-4 p-4" id="resultCard" style="display: none;">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <h5 class="mb-0 text-success">URL đã được rút gọn thành công!</h5>
+                            </div>
+
+                            <div class="bg-white rounded-3 p-3 mb-3">
+                                <label class="form-label fw-bold">URL rút gọn của bạn:</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="shortLinkResult" readonly>
+                                    <button class="btn btn-primary" onclick="copyToClipboard()" id="copyBtn">
+                                        <i class="fas fa-copy me-2"></i><span id="copyText">Sao chép</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="small text-muted">
+                                <p><strong>URL gốc:</strong> <span id="originalLinkDisplay"></span></p>
+                                <p class="mb-0">Bạn có thể sử dụng URL rút gọn này để chia sẻ hoặc truy cập trực tiếp.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- History Tab -->
+                    <div class="tab-pane fade" id="history">
+                        <div class="main-card p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="mb-0">
+                                    <i class="fas fa-history me-2"></i>Lịch sử rút gọn
+                                </h4>
+                                <button class="btn btn-outline-danger btn-sm" onclick="clearHistory()"
+                                    id="clearHistoryBtn">
+                                    <i class="fas fa-trash me-2"></i>Xóa tất cả
+                                </button>
+                            </div>
+
+                            <div id="historyContent">
+                                <!-- History items will be populated here -->
+                            </div>
+
+                            <div id="emptyHistory" class="text-center py-5">
+                                <i class="fas fa-history fa-5x text-muted mb-3"></i>
+                                <h5 class="text-muted">Chưa có lịch sử rút gọn nào</h5>
+                                <p class="text-muted">Các URL đã rút gọn sẽ hiển thị tại đây</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="row justify-content-center mt-5" id="statsSection" style="display: none;">
+            <div class="col-lg-8">
+                <div class="stats-card p-4">
+                    <h5 class="mb-3">
+                        <i class="fas fa-chart-bar me-2"></i>Thống kê
+                    </h5>
+                    <div class="row text-center">
+                        <div class="col-md-6">
+                            <h3 class="text-primary mb-1" id="totalLinks">0</h3>
+                            <p class="text-muted small">Tổng số link đã tạo</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h3 class="text-success mb-1" id="lastCreated">-</h3>
+                            <p class="text-muted small">Link gần nhất</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="row justify-content-center mt-5">
+            <div class="col-lg-10">
+                <h2 class="text-center text-white mb-5">Tại sao chọn TinyURL?</h2>
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="feature-card text-center p-4">
+                            <div class="mb-3">
+                                <i class="fas fa-bolt fa-3x text-warning"></i>
+                            </div>
+                            <h5 class="mb-3">Nhanh chóng</h5>
+                            <p class="text-muted">Rút gọn URL trong vài giây với giao diện đơn giản</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="feature-card text-center p-4">
+                            <div class="mb-3">
+                                <i class="fas fa-shield-alt fa-3x text-success"></i>
+                            </div>
+                            <h5 class="mb-3">Đáng tin cậy</h5>
+                            <p class="text-muted">Hệ thống ổn định, bảo mật cao và hoạt động 24/7</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="feature-card text-center p-4">
+                            <div class="mb-3">
+                                <i class="fas fa-share-alt fa-3x text-info"></i>
+                            </div>
+                            <h5 class="mb-3">Dễ chia sẻ</h5>
+                            <p class="text-muted">Sao chép và chia sẻ URL rút gọn một cách dễ dàng</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-5">
+            <p class="text-white-50">© 2024 TinyURL. Tất cả quyền được bảo lưu.</p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Global variables
+        let linkHistory = [];
+        let isLoading = false;
+
+        // DOM elements
+        const originalUrlInput = document.getElementById('originalUrl');
+        const submitBtn = document.getElementById('submitBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const errorAlert = document.getElementById('errorAlert');
+        const errorMessage = document.getElementById('errorMessage');
+        const resultCard = document.getElementById('resultCard');
+        const shortLinkResult = document.getElementById('shortLinkResult');
+        const originalLinkDisplay = document.getElementById('originalLinkDisplay');
+        const copyBtn = document.getElementById('copyBtn');
+        const copyText = document.getElementById('copyText');
+        const historyContent = document.getElementById('historyContent');
+        const emptyHistory = document.getElementById('emptyHistory');
+        const historyCount = document.getElementById('historyCount');
+        const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+        const statsSection = document.getElementById('statsSection');
+        const totalLinks = document.getElementById('totalLinks');
+        const lastCreated = document.getElementById('lastCreated');
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function () {
+            updateHistoryDisplay();
+            updateStats();
+        });
+
+        // Utility functions
+        function isValidUrl(url) {
+            try {
+                new URL(url);
+                return true;
+            } catch {
+                return false;
+            }
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorAlert.style.display = 'block';
+            setTimeout(() => {
+                errorAlert.style.display = 'none';
+            }, 5000);
+        }
+
+        function hideError() {
+            errorAlert.style.display = 'none';
+        }
+
+        function setLoading(loading) {
+            isLoading = loading;
+            if (loading) {
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Đang xử lý...';
+                submitBtn.disabled = true;
+                originalUrlInput.disabled = true;
+            } else {
+                submitBtn.innerHTML = '<i class="fas fa-arrow-right me-2"></i>Rút gọn URL';
+                submitBtn.disabled = false;
+                originalUrlInput.disabled = false;
+            }
+        }
+
+        // Main functions
+        function createShortLink() {
+            const originalUrl = originalUrlInput.value.trim();
+
+            if (!originalUrl) {
+                showError('Vui lòng nhập URL cần rút gọn');
+                return;
+            }
+
+            if (!isValidUrl(originalUrl)) {
+                showError('URL không hợp lệ. Vui lòng nhập URL đúng định dạng (ví dụ: https://example.com)');
+                return;
+            }
+
+            setLoading(true);
+            hideError();
+            resultCard.style.display = 'none';
+
+            fetch('http://localhost:8080/v1/public/shortlink/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    originalLink: originalUrl
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message === 'Success.' && data.data) {
+                        const shortUrl = data.data.shortLink;
+
+                        // Save to history
+                        saveToHistory(originalUrl, shortUrl);
+
+                        // Display result
+                        shortLinkResult.value = shortUrl;
+                        originalLinkDisplay.textContent = originalUrl;
+                        resultCard.style.display = 'block';
+                        resetBtn.style.display = 'block';
+
+                        // Update stats
+                        updateStats();
+                    } else {
+                        showError(data.message || 'Có lỗi xảy ra khi tạo short link');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showError('Không thể kết nối đến server. Vui lòng thử lại sau.');
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
+        }
+
+        function saveToHistory(originalUrl, shortUrl) {
+            const newEntry = {
+                id: Date.now(),
+                originalUrl: originalUrl,
+                shortUrl: shortUrl,
+                createdAt: new Date().toLocaleString('vi-VN')
+            };
+
+            linkHistory.unshift(newEntry);
+
+            // Keep only 10 most recent
+            if (linkHistory.length > 10) {
+                linkHistory = linkHistory.slice(0, 10);
+            }
+
+            updateHistoryDisplay();
+        }
+
+        function updateHistoryDisplay() {
+            historyCount.textContent = linkHistory.length;
+
+            if (linkHistory.length === 0) {
+                emptyHistory.style.display = 'block';
+                historyContent.innerHTML = '';
+                clearHistoryBtn.style.display = 'none';
+            } else {
+                emptyHistory.style.display = 'none';
+                clearHistoryBtn.style.display = 'block';
+
+                const historyHtml = linkHistory.map(item => `
+                    <div class="history-item p-3 mb-3">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <small class="text-muted">${item.createdAt}</small>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-sm btn-outline-primary" onclick="copyHistoryLink('${item.shortUrl}')" title="Sao chép">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                                <a href="${item.shortUrl}" target="_blank" class="btn btn-sm btn-outline-success" title="Mở link">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <small class="fw-bold text-muted">Short Link:</small>
+                            <div class="text-primary small text-break">${item.shortUrl}</div>
+                        </div>
+                        <div>
+                            <small class="fw-bold text-muted">URL gốc:</small>
+                            <div class="text-secondary small text-break">${item.originalUrl}</div>
+                        </div>
+                    </div>
+                `).join('');
+
+                historyContent.innerHTML = historyHtml;
+            }
+        }
+
+        function updateStats() {
+            if (linkHistory.length > 0) {
+                statsSection.style.display = 'block';
+                totalLinks.textContent = linkHistory.length;
+                lastCreated.textContent = linkHistory[0].createdAt.split(',')[0];
+            } else {
+                statsSection.style.display = 'none';
+            }
+        }
+
+        function copyToClipboard() {
+            const shortUrl = shortLinkResult.value;
+            navigator.clipboard.writeText(shortUrl).then(() => {
+                copyText.textContent = 'Đã sao chép!';
+                copyBtn.classList.remove('btn-primary');
+                copyBtn.classList.add('btn-success');
+
+                setTimeout(() => {
+                    copyText.textContent = 'Sao chép';
+                    copyBtn.classList.remove('btn-success');
+                    copyBtn.classList.add('btn-primary');
+                }, 2000);
+            }).catch(err => {
+                showError('Không thể sao chép link. Vui lòng thử lại.');
+            });
+        }
+
+        function copyHistoryLink(shortUrl) {
+            navigator.clipboard.writeText(shortUrl).then(() => {
+                // Show success feedback
+                const Toast = new bootstrap.Toast(document.createElement('div'));
+                // Simple success feedback
+                showError('Link đã được sao chép!');
+                setTimeout(() => hideError(), 2000);
+            }).catch(err => {
+                showError('Không thể sao chép link. Vui lòng thử lại.');
+            });
+        }
+
+        function clearHistory() {
+            if (confirm('Bạn có chắc chắn muốn xóa tất cả lịch sử?')) {
+                linkHistory = [];
+                updateHistoryDisplay();
+                updateStats();
+            }
+        }
+
+        function resetForm() {
+            originalUrlInput.value = '';
+            resultCard.style.display = 'none';
+            resetBtn.style.display = 'none';
+            hideError();
+            originalUrlInput.focus();
+        }
+
+        function clearInput() {
+            originalUrlInput.value = '';
+            originalUrlInput.focus();
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !isLoading) {
+                createShortLink();
+            }
+        }
+
+        // Tab switching event
+        document.querySelectorAll('[data-bs-toggle="tab"]').forEach(tab => {
+            tab.addEventListener('shown.bs.tab', function () {
+                updateHistoryDisplay();
+                updateStats();
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -19,6 +19,7 @@ public class Link {
     private String shortCode;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
+    private String clientIp;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

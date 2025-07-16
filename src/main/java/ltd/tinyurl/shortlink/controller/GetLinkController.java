@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ltd.tinyurl.shortlink.service.impl.PublicShortLinkServiceImpl;
+import ltd.tinyurl.shortlink.webconstants.WebConstants;
 
 @RestController
 @RequestMapping("/")
@@ -22,7 +23,11 @@ public class GetLinkController {
 
     @GetMapping("{shortCode}")
     public ResponseEntity<Void> getLink(@PathVariable String shortCode) throws URISyntaxException {
-        URI url = new URI(publicShortLinkServiceImpl.getLink(shortCode));
+        String message = publicShortLinkServiceImpl.getLink(shortCode);
+        if (message.equals(WebConstants.SHORT_LINK_NOT_FOUND_MESSAGE)) {
+            return new ResponseEntity<>(new HttpHeaders(), HttpStatus.NOT_FOUND);
+        }
+        URI url = new URI(message);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(url);
         return new ResponseEntity<>(httpHeaders, HttpStatus.FOUND);
