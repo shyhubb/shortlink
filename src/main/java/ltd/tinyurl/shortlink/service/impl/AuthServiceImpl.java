@@ -1,5 +1,6 @@
 package ltd.tinyurl.shortlink.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -53,6 +54,7 @@ public class AuthServiceImpl implements AuthService {
         user.setAccount(account);
         user.setPassword(passwordEncoder.encode(password));
         user.setRole(role);
+        user.setCreateAt(LocalDateTime.now());
         Wallet wallet = new Wallet();
         wallet.setUser(user);
         user.setWallet(wallet);
