@@ -55,6 +55,7 @@ public class AuthServiceImpl implements AuthService {
         user.setRole(role);
         Wallet wallet = new Wallet();
         wallet.setUser(user);
+        user.setWallet(wallet);
 
         userRepository.save(user);
         walletServiceImpl.createWallet(wallet);

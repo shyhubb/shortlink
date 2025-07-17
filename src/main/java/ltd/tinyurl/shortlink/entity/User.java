@@ -22,6 +22,9 @@ public class User {
     private String account;
     private String password;
 
+    private String name;
+    private String email;
+
     @OneToMany(mappedBy = "user")
     private List<Link> links;
 

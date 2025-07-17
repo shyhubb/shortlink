@@ -1,5 +1,8 @@
 package ltd.tinyurl.shortlink.service;
 
-public interface UserService {
+import ltd.tinyurl.shortlink.dto.response.BaseResponse;
+import ltd.tinyurl.shortlink.dto.response.UserResponse;
 
+public interface UserService {
+    public BaseResponse<UserResponse> getProfile();
 }
