@@ -3,7 +3,7 @@
 ![Java](https://img.shields.io/badge/Java-17-blue)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.5.3-green)
 ![Maven](https://img.shields.io/badge/Maven-3.x-red)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-42.x-blue)
+
 ![MySQL](https://img.shields.io/badge/MySQL-8.0-orange)
 ![JWT](https://img.shields.io/badge/JWT-Authentication-yellow)
 ![Deployed On Render](https://img.shields.io/badge/Deployed%20on-Render-darkgreen)
