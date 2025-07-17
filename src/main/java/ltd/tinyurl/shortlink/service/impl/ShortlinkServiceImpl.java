@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import lombok.Data;
 import ltd.tinyurl.shortlink.dto.request.CustomLinkRequest;
 import ltd.tinyurl.shortlink.dto.request.LinkRequest;
 import ltd.tinyurl.shortlink.dto.response.BaseResponse;
@@ -19,6 +20,7 @@ import ltd.tinyurl.shortlink.service.ShortlinkService;
 import ltd.tinyurl.shortlink.webconstants.WebConstants;
 
 @Service
+@Data
 public class ShortlinkServiceImpl implements ShortlinkService {
 
     private final LinkRepository linkRepository;
@@ -26,11 +28,6 @@ public class ShortlinkServiceImpl implements ShortlinkService {
     private final SecureRandom random = new SecureRandom();
 
     private final CurrentUserDetails currentUserDetails;
-
-    public ShortlinkServiceImpl(LinkRepository linkRepository, CurrentUserDetails currentUserDetails) {
-        this.linkRepository = linkRepository;
-        this.currentUserDetails = currentUserDetails;
-    }
 
     @Override
     public BaseResponse<CreateLinkResponse> generateShortLink(LinkRequest linkPublicRequest, String clientIp) {

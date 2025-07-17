@@ -5,17 +5,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import lombok.Data;
 import ltd.tinyurl.shortlink.entity.User;
 import ltd.tinyurl.shortlink.repository.UserRepository;
 
 @Service
+@Data
 public class CurrentUserDetails {
 
     private final UserRepository userRepository;
-
-    public CurrentUserDetails(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     // lay user trong request
     public User getUserDetails() {

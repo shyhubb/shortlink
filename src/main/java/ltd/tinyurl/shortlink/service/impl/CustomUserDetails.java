@@ -8,17 +8,15 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import lombok.Data;
 import ltd.tinyurl.shortlink.entity.User;
 import ltd.tinyurl.shortlink.repository.UserRepository;
 
 @Service
+@Data
 public class CustomUserDetails implements UserDetailsService {
 
     private final UserRepository userRepository;
-
-    CustomUserDetails(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String account) throws UsernameNotFoundException {

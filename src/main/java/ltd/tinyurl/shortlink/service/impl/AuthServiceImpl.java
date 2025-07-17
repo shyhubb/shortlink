@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import lombok.Data;
 import ltd.tinyurl.shortlink.dto.request.LoginRequest;
 import ltd.tinyurl.shortlink.dto.request.UserRequest;
 import ltd.tinyurl.shortlink.dto.response.BaseResponse;
@@ -18,6 +20,7 @@ import ltd.tinyurl.shortlink.service.AuthService;
 import ltd.tinyurl.shortlink.webconstants.WebConstants;
 
 @Service
+@Data
 public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
 
@@ -28,14 +31,6 @@ public class AuthServiceImpl implements AuthService {
     private final WalletServiceImpl walletServiceImpl;
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-    public AuthServiceImpl(UserRepository userRepository, JwtTokenProvider jwtTokenProvider,
-            RoleRepository roleRepository, WalletServiceImpl walletServiceImpl) {
-        this.userRepository = userRepository;
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.roleRepository = roleRepository;
-        this.walletServiceImpl = walletServiceImpl;
-    }
 
     @Override
     public BaseResponse register(UserRequest userRequest) {
