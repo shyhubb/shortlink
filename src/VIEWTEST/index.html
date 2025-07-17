@@ -4,123 +4,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TinyURL - Rút gọn URL</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <title>Link3s - Rút gọn liên kết của bạn</title>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root {
-            --bg-start: #2c3e50;
-            /* Dark Blue */
-            --bg-end: #34495e;
-            /* Darker Blue */
-            --card-bg: rgba(44, 62, 80, 0.95);
-            /* Darker Card */
-            --text-color: #ecf0f1;
-            /* Light Gray */
-            --heading-color: #3498db;
-            /* Blue for headings */
-            --input-border: #7f8c8d;
-            /* Gray for input borders */
-            --input-focus-border: #3498db;
-            /* Blue for input focus */
-            --primary-btn-start: #3498db;
-            /* Blue */
-            --primary-btn-end: #2980b9;
-            /* Darker Blue */
-            --result-card-bg-start: #34495e;
-            /* Dark Blue-Gray */
-            --result-card-bg-end: #2c3e50;
-            /* Dark Blue */
-            --history-item-bg: #3b5066;
-            /* Slightly lighter dark */
-            --history-item-border: #4d648d;
-            /* Even lighter dark */
-            --nav-link-color: #bdc3c7;
-            /* Light gray for nav links */
-            --nav-link-active-bg-start: #3498db;
-            /* Blue */
-            --nav-link-active-bg-end: #2980b9;
-            /* Darker Blue */
-            --feature-card-bg: rgba(44, 62, 80, 0.9);
-            /* Darker Card */
-            --alert-danger-bg: #e74c3c;
-            /* Red */
-            --alert-danger-text: #fff;
-            /* White */
-            /* Removed --start-server-btn-start/end as we will reuse primary */
-        }
-
-
+        /* Custom CSS for animations and specific properties not in Tailwind */
         body {
-            background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
-            min-height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: var(--text-color);
+            background-image: radial-gradient(circle at top left, rgba(0, 188, 212, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at bottom right, rgba(0, 188, 212, 0.1) 0%, transparent 40%);
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            animation: backgroundShift 20s infinite alternate;
         }
 
-        .main-card,
-        .server-status-card,
-        .stats-card,
-        .feature-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(5px);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        @keyframes backgroundShift {
+            0% {
+                background-position: 0% 0%, 100% 100%;
+            }
+
+            100% {
+                background-position: 100% 100%, 0% 0%;
+            }
         }
 
-        .brand-logo {
-            background: linear-gradient(45deg, #3498db, #8e44ad);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-weight: bold;
+        .backdrop-blur-md {
+            /* Custom class for glassmorphism */
+            backdrop-filter: blur(8px);
+            /* Reduced blur for performance */
+            -webkit-backdrop-filter: blur(8px);
+            /* For Safari compatibility */
         }
 
-        .btn-primary {
-            background: linear-gradient(45deg, var(--primary-btn-start), var(--primary-btn-end));
-            border: none;
-            border-radius: 12px;
-            padding: 12px 30px;
-            font-weight: 600;
-            transition: all 0.3s ease;
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(0, 188, 212, 0.05) 0%, transparent 70%);
+            animation: rotateBackground 30s infinite linear;
+            z-index: 0;
+            will-change: transform;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+        @keyframes rotateBackground {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
         }
 
-        .form-control {
-            border-radius: 12px;
-            border: 2px solid var(--input-border);
-            padding: 15px 20px;
-            font-size: 16px;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: var(--text-color);
-            transition: all 0.3s ease;
+        .animate-fadeInScale {
+            animation: fadeInScale 1.5s ease-out forwards;
+            opacity: 0;
+            will-change: transform, opacity;
         }
 
-        .form-control::placeholder {
-            color: rgba(236, 240, 241, 0.6);
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
-        .form-control:focus {
-            border-color: var(--input-focus-border);
-            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
-            background-color: rgba(255, 255, 255, 0.15);
-            color: var(--text-color);
+        .animate-fadeIn {
+            animation: fadeIn 2s ease-out 0.5s forwards;
+            opacity: 0;
+            will-change: transform, opacity;
         }
 
-        .result-card {
-            background: linear-gradient(135deg, var(--result-card-bg-start) 0%, var(--result-card-bg-end) 100%);
-            border-radius: 15px;
-            border: none;
-            animation: slideIn 0.5s ease-out;
-            color: var(--text-color);
-        }
-
-        @keyframes slideIn {
+        @keyframes fadeIn {
             from {
                 opacity: 0;
                 transform: translateY(20px);
@@ -132,651 +97,507 @@
             }
         }
 
-        .history-item {
-            background: var(--history-item-bg);
+        .animate-bounceIn {
+            animation: bounceIn 1s ease-out 1s forwards;
+            opacity: 0;
+            will-change: transform, opacity;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+
+            70% {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .shine-effect::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: all 0.4s ease-out;
+            will-change: transform;
+        }
+
+        .shine-effect:hover::before {
+            left: 100%;
+        }
+
+        .form-gradient-border::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            background: linear-gradient(45deg, rgba(0, 188, 212, 0.05), rgba(0, 188, 212, 0.01));
+            filter: blur(8px);
+            -webkit-filter: blur(8px);
+            z-index: 0;
             border-radius: 12px;
-            transition: all 0.3s ease;
-            border: 1px solid var(--history-item-border);
-            color: var(--text-color);
+            will-change: filter;
         }
 
-        .history-item:hover {
-            background: #4a627e;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        .animate-slideInUp {
+            animation: slideInUp 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+            will-change: transform, opacity;
         }
 
-        .nav-tabs {
-            border: none;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 5px;
+        @keyframes slideInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .nav-tabs .nav-link {
-            border: none;
-            border-radius: 10px;
-            color: var(--nav-link-color);
-            font-weight: 600;
-            transition: all 0.3s ease;
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 188, 212, 0.05) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
         }
 
-        .nav-tabs .nav-link.active {
-            background: linear-gradient(45deg, var(--nav-link-active-bg-start), var(--nav-link-active-bg-end));
-            color: white;
+        .feature-card:hover::before {
+            opacity: 1;
         }
 
-        .spinner-border {
-            width: 1.5rem;
-            height: 1.5rem;
+        .animate-pop-in {
+            animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            opacity: 0;
+            transform: scale(0.8);
+            will-change: transform, opacity;
         }
 
-        .stats-card,
-        .server-status-card {
-            color: var(--text-color);
+        @keyframes popIn {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
-        .feature-card {
-            color: var(--text-color);
-        }
+        /* Responsive Optimization for Mobile Performance */
+        @media (max-width: 767px) {
+            body {
+                animation: none;
+                /* Disable backgroundShift on mobile */
+                background-image: none;
+                /* Remove radial gradients for body */
+            }
 
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
+            .hero::before {
+                animation: none;
+                /* Disable rotateBackground on mobile */
+                background: none;
+                /* Remove radial gradient for hero */
+            }
 
-        .alert-danger {
-            background-color: var(--alert-danger-bg);
-            color: var(--alert-danger-text);
-            border-radius: 12px;
-            border: none;
-        }
+            .form-gradient-border::before {
+                filter: none;
+                /* Disable blur for form border on mobile */
+                -webkit-filter: none;
+                background: none;
+                /* Remove gradient for form border */
+            }
 
-        .btn-outline-secondary {
-            border-radius: 10px;
-            border: 2px solid #7f8c8d;
-            color: #bdc3c7;
-            transition: all 0.3s ease;
-        }
+            /* Adjust font sizes and padding for better mobile readability and less clutter */
+            .hero h1 {
+                font-size: 3.5rem;
+                /* Smaller on mobile */
+            }
 
-        .btn-outline-secondary:hover {
-            background: #7f8c8d;
-            color: white;
-            transform: translateY(-2px);
-        }
+            .hero p {
+                font-size: 1.1rem;
+                /* Smaller on mobile */
+            }
 
-        /* Specific colors for text within cards */
-        .text-muted {
-            color: rgba(236, 240, 241, 0.7) !important;
-        }
+            .shorten-link h2,
+            .features h2,
+            .mission h2,
+            .achievements h2 {
+                font-size: 2.5rem;
+                /* Smaller on mobile */
+            }
 
-        .text-primary {
-            color: #3498db !important;
-        }
+            .shorten-form input,
+            .shorten-form button {
+                font-size: 1rem;
+                /* Smaller input/button text */
+                padding: 12px 20px;
+                /* Smaller padding */
+            }
 
-        .text-success {
-            color: #2ecc71 !important;
-        }
+            .result-area {
+                font-size: 1rem;
+                /* Smaller result text */
+                padding: 15px;
+                /* Smaller padding */
+            }
 
-        .text-warning {
-            color: #f1c40f !important;
-        }
+            .feature-card h3 {
+                font-size: 1.8rem;
+            }
 
-        .text-info {
-            color: #3498db !important;
-        }
+            .feature-card p {
+                font-size: 0.95rem;
+            }
 
-        .text-danger {
-            color: #e74c3c !important;
-        }
-
-        .small.text-muted strong,
-        .history-item small.fw-bold.text-muted {
-            color: rgba(236, 240, 241, 0.8) !important;
-        }
-
-        .bg-white {
-            background-color: rgba(255, 255, 255, 0.1) !important;
-            /* Make inner input section dark as well */
-        }
-
-        .text-white-50 {
-            color: rgba(236, 240, 241, 0.5) !important;
-        }
-
-        .form-label.fw-bold {
-            color: var(--text-color);
-        }
-
-        /* Styles for server status buttons */
-        .btn-server-status {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 12px;
-            padding: 10px 20px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-server-status.btn-check-status {
-            background-color: var(--primary-btn-start);
-            /* Using primary color for consistency */
-            border: none;
-            color: white;
-        }
-
-        .btn-server-status.btn-check-status:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.3);
-            color: white;
-        }
-
-        .btn-server-status.btn-start-server {
-            background: linear-gradient(45deg, var(--primary-btn-start), var(--primary-btn-end));
-            border: none;
-            color: white;
-        }
-
-        .btn-server-status.btn-start-server:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
-            color: white;
+            .achievement-card p:first-child {
+                /* Numbers in achievements */
+                font-size: 4rem;
+            }
         }
     </style>
 </head>
 
-<body>
-    <div class="container py-5">
-        <div class="text-center mb-5">
-            <div class="mb-3">
-                <i class="fas fa-bolt fa-3x text-warning bg-white rounded-circle p-3 shadow"></i>
-            </div>
-            <h1 class="display-4 brand-logo mb-3">TinyURL</h1>
-            <p class="lead text-white">Rút gọn URL của bạn một cách nhanh chóng và dễ dàng</p>
+<body class="font-inter antialiased bg-[#0D1117] text-[#C9D1D9] leading-relaxed overflow-x-hidden">
+    <header
+        class="bg-[#161B22] bg-opacity-80 backdrop-blur-md py-3 shadow-2xl flex justify-between items-center sticky top-0 z-50 border-b border-teal-600/20">
+        <div class="container mx-auto px-4 sm:px-6 flex justify-between items-center w-full">
+            <a href="#" class="text-4xl sm:text-5xl font-extrabold text-teal-400 no-underline inline-block transition-all duration-300 ease-in-out ml-2 sm:ml-4
+                      hover:text-teal-300 drop-shadow-lg hover:drop-shadow-xl">
+                Link3s
+            </a>
+            <nav class="mr-2 sm:mr-4">
+                <a href="login.html" class="text-sm sm:text-base text-gray-100 no-underline font-semibold ml-4 sm:ml-6 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl transition-all duration-300 ease-in-out relative overflow-hidden shine-effect
+                          hover:text-teal-300 hover:translate-y-[-2px]">
+                    Đăng nhập
+                </a>
+            </nav>
         </div>
+    </header>
 
-        <div class="row justify-content-center mb-4">
-            <div class="col-lg-8">
-                <div class="server-status-card p-4 text-center">
-                    <h5 class="mb-3">
-                        <i class="fas fa-server me-2"></i>Tình trạng máy chủ
-                    </h5>
-                    <p class="mb-2 text-muted">Máy chủ của chúng tôi có thể tự động "ngủ" sau 15 phút không hoạt động để
-                        tiết kiệm tài nguyên. Nếu bạn thấy máy chủ đang khởi động, phiền bạn đợi máy chủ khởi động.</p>
+    <main>
+        <section
+            class="hero text-center py-24 sm:py-32 px-4 bg-gradient-to-br from-[#0D1117]/70 to-[#161B22]/70 border-b border-teal-600/20 relative overflow-hidden">
+            <div class="container mx-auto relative z-10">
+                <h1
+                    class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl mb-4 sm:mb-6 text-teal-300 leading-tight font-extrabold drop-shadow-xl animate-fadeInScale">
+                    Rút gọn liên kết dài của bạn. <br class="hidden sm:block"> Đơn giản hóa việc chia sẻ.
+                </h1>
+                <p
+                    class="text-lg sm:text-xl md:text-2xl text-gray-400 max-w-2xl sm:max-w-3xl lg:max-w-4xl mx-auto mb-10 sm:mb-12 animate-fadeIn">
+                    Biến các URL dài thành các liên kết ngắn gọn, có thể theo dõi và dễ nhớ. Hoàn hảo cho mạng xã hội,
+                    email và thuyết trình.
+                </p>
+                <button onclick="document.getElementById('shorten-section').scrollIntoView({ behavior: 'smooth' });"
+                    class="bg-teal-500 text-gray-900 px-8 py-4 sm:px-10 sm:py-5 text-lg sm:text-xl font-bold rounded-xl cursor-pointer transition-all duration-300 ease-in-out shadow-lg shadow-teal-500/40 relative overflow-hidden shine-effect animate-bounceIn
+                               hover:bg-teal-400 hover:translate-y-[-5px] hover:shadow-xl hover:shadow-teal-500/60">
+                    Bắt đầu ngay
+                </button>
+            </div>
+        </section>
 
-                    <button class="btn-server-status btn-check-status mt-2" onclick="checkServerStatus()"
-                        id="checkServerStatusBtn">
-                        <span id="serverStatusIcon" class="me-2"><i class="fas fa-circle text-warning"></i></span>
-                        <span id="serverStatusText">Đang khởi động máy chủ vui lòng đợi.</span>
+        <section
+            class="shorten-link py-16 sm:py-20 px-4 text-center bg-[#161B22] border-b border-teal-600/20 relative overflow-hidden"
+            id="shorten-section">
+            <div class="container mx-auto">
+                <h2 class="text-4xl sm:text-5xl font-extrabold mb-10 sm:mb-12 text-teal-400 drop-shadow-md">Rút gọn URL
+                    của bạn</h2>
+                <form id="shortenForm"
+                    class="shorten-form flex flex-col items-center gap-5 sm:gap-6 max-w-xl sm:max-w-3xl mx-auto bg-[#0D1117] p-8 sm:p-12 rounded-xl shadow-2xl border border-teal-600/30 relative overflow-hidden form-gradient-border">
+                    <input type="url" id="originalLinkInput" placeholder="Link cần rút gọn." required
+                        class="w-full p-4 sm:p-5 border-2 border-teal-500 rounded-xl bg-[#161B22] text-gray-100 text-lg sm:text-xl transition-all duration-300 ease-in-out shadow-inner shadow-gray-900/50
+                                  placeholder:text-gray-500 placeholder:opacity-70 focus:outline-none focus:border-teal-400 focus:shadow-lg focus:shadow-teal-500/40 focus:bg-[#1A212B] cursor-text z-10">
+                    <button type="submit" id="shortenButton"
+                        class="bg-teal-500 text-gray-900 px-8 py-4 sm:px-10 sm:py-5 text-lg sm:text-xl font-bold rounded-xl cursor-pointer transition-all duration-300 ease-in-out w-full shadow-lg shadow-teal-500/40 relative overflow-hidden shine-effect
+                                   hover:bg-teal-400 hover:translate-y-[-3px] hover:shadow-xl hover:shadow-teal-500/60">
+                        Rút gọn URL
                     </button>
-
-                    <a href="https://link3s.onrender.com/" target="_blank"
-                        class="btn-server-status btn-start-server mt-2" id="awakenServerLink" style="display: none;">
-                        <i class="fas fa-power-off me-2"></i>Khởi động máy chủ
-                    </a>
-                    <small id="serverMessage" class="d-block mt-2 text-muted"></small>
+                </form>
+                <div id="resultArea"
+                    class="result-area mt-8 sm:mt-10 p-6 sm:p-8 bg-[#161B22] rounded-xl border border-teal-600/30 text-gray-100 text-lg sm:text-xl break-words text-left mx-auto max-w-xl sm:max-w-3xl shadow-2xl opacity-0 translate-y-5 hidden">
+                    <p class="mb-3 sm:mb-4 text-gray-400 font-semibold">URL rút gọn của bạn:</p>
+                    <a id="shortLinkOutput" href="#" target="_blank"
+                        class="text-teal-400 no-underline font-bold transition-colors duration-300 block mb-3 sm:mb-4 hover:text-teal-300 hover:underline"></a>
+                    <button id="copyButton" class="bg-teal-500 text-gray-900 px-5 py-2.5 sm:px-6 sm:py-3 text-base sm:text-lg font-semibold rounded-lg cursor-pointer transition-all duration-300 shadow-md shadow-teal-500/30
+                                                 hover:bg-teal-400 hover:translate-y-[-2px]">
+                        Sao chép liên kết
+                    </button>
+                </div>
+                <div id="errorMessage"
+                    class="error-message text-red-500 mt-4 sm:mt-5 font-semibold text-base sm:text-lg hidden animate-fadeIn">
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <ul class="nav nav-tabs justify-content-center mb-4" id="mainTabs">
-                    <li class="nav-item">
-                        <button class="nav-link active" id="shorten-tab" data-bs-toggle="tab" data-bs-target="#shorten">
-                            <i class="fas fa-link me-2"></i>Rút gọn URL
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history">
-                            <i class="fas fa-history me-2"></i>Lịch sử (<span id="historyCount">0</span>)
-                        </button>
-                    </li>
-                </ul>
-
-                <div class="tab-content">
-                    <div class="tab-pane fade show active" id="shorten">
-                        <div class="main-card p-4">
-                            <div class="mb-4">
-                                <label for="originalUrl" class="form-label fw-bold">
-                                    <i class="fas fa-link me-2"></i>Nhập URL cần rút gọn
-                                </label>
-                                <div class="input-group">
-                                    <input type="url" class="form-control" id="originalUrl"
-                                        placeholder="https://example.com" onkeypress="handleKeyPress(event)">
-                                    <button class="btn btn-outline-secondary" type="button" onclick="clearInput()">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <button class="btn btn-primary w-100 mb-3" onclick="createShortLink()" id="submitBtn">
-                                <i class="fas fa-arrow-right me-2"></i>Rút gọn URL
-                            </button>
-
-                            <button class="btn btn-outline-secondary w-100" onclick="resetForm()" id="resetBtn"
-                                style="display: none;">
-                                <i class="fas fa-refresh me-2"></i>Tạo link mới
-                            </button>
-                        </div>
-
-                        <div class="alert alert-danger mt-4" id="errorAlert" style="display: none;">
-                            <i class="fas fa-exclamation-circle me-2"></i>
-                            <span id="errorMessage"></span>
-                        </div>
-
-                        <div class="result-card mt-4 p-4" id="resultCard" style="display: none;">
-                            <div class="d-flex align-items-center mb-3">
-                                <i class="fas fa-check-circle text-success me-2"></i>
-                                <h5 class="mb-0 text-success">URL đã được rút gọn thành công!</h5>
-                            </div>
-
-                            <div class="bg-white rounded-3 p-3 mb-3">
-                                <label class="form-label fw-bold">URL rút gọn của bạn:</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="shortLinkResult" readonly>
-                                    <button class="btn btn-primary" onclick="copyToClipboard()" id="copyBtn">
-                                        <i class="fas fa-copy me-2"></i><span id="copyText">Sao chép</span>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="small text-muted">
-                                <p><strong>URL gốc:</strong> <span id="originalLinkDisplay"></span></p>
-                                <p class="mb-0">Bạn có thể sử dụng URL rút gọn này để chia sẻ hoặc truy cập trực tiếp.
-                                </p>
-                            </div>
-                        </div>
+        <section class="features py-20 sm:py-24 px-4 text-center bg-[#0D1117] relative overflow-hidden">
+            <div class="container mx-auto relative z-10">
+                <h2 class="text-5xl sm:text-6xl font-extrabold mb-16 sm:mb-20 text-teal-300 drop-shadow-xl">Tại sao chọn
+                    Link3s?</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 justify-center">
+                    <div
+                        class="feature-card bg-[#161B22] p-8 sm:p-10 rounded-xl shadow-2xl transition-all duration-400 ease-in-out border border-teal-600/20 flex flex-col items-center text-center relative overflow-hidden
+                                hover:translate-y-[-10px] hover:shadow-3xl hover:shadow-gray-900/80 hover:border-teal-500 group">
+                        <img src="https://placehold.co/100x100/00BCD4/0D1117?text=Tốc+độ" alt="Biểu tượng tốc độ" class="max-w-[100px] h-auto mb-5 sm:mb-6 rounded-full border-4 border-teal-500 shadow-xl shadow-teal-500/70 transition-all duration-400 ease-in-out
+                                    group-hover:scale-105 group-hover:shadow-2xl group-hover:shadow-teal-400">
+                        <h3 class="text-2xl sm:text-3xl text-teal-300 mb-4 sm:mb-5 font-extrabold drop-shadow-md">Nhanh
+                            & Dễ dàng</h3>
+                        <p class="text-gray-400 text-base sm:text-lg leading-relaxed max-w-[95%]">
+                            Tạo liên kết rút gọn trong vài giây với giao diện đơn giản, trực quan. Không yêu cầu đăng
+                            ký.
+                        </p>
                     </div>
-
-                    <div class="tab-pane fade" id="history">
-                        <div class="main-card p-4">
-                            <div class="d-flex justify-content-between align-items-center mb-4">
-                                <h4 class="mb-0">
-                                    <i class="fas fa-history me-2"></i>Lịch sử rút gọn
-                                </h4>
-                                <button class="btn btn-outline-danger btn-sm" onclick="clearHistory()"
-                                    id="clearHistoryBtn">
-                                    <i class="fas fa-trash me-2"></i>Xóa tất cả
-                                </button>
-                            </div>
-
-                            <div id="historyContent">
-                            </div>
-
-                            <div id="emptyHistory" class="text-center py-5">
-                                <i class="fas fa-history fa-5x text-muted mb-3"></i>
-                                <h5 class="text-muted">Chưa có lịch sử rút gọn nào</h5>
-                                <p class="text-muted">Các URL đã rút gọn sẽ hiển thị tại đây</p>
-                            </div>
-                        </div>
+                    <div
+                        class="feature-card bg-[#161B22] p-8 sm:p-10 rounded-xl shadow-2xl transition-all duration-400 ease-in-out border border-teal-600/20 flex flex-col items-center text-center relative overflow-hidden
+                                hover:translate-y-[-10px] hover:shadow-3xl hover:shadow-gray-900/80 hover:border-teal-500 group">
+                        <img src="https://placehold.co/100x100/00BCD4/0D1117?text=Tin+cậy" alt="Biểu tượng đáng tin cậy"
+                            class="max-w-[100px] h-auto mb-5 sm:mb-6 rounded-full border-4 border-teal-500 shadow-xl shadow-teal-500/70 transition-all duration-400 ease-in-out
+                                    group-hover:scale-105 group-hover:shadow-2xl group-hover:shadow-teal-400">
+                        <h3 class="text-2xl sm:text-3xl text-teal-300 mb-4 sm:mb-5 font-extrabold drop-shadow-md">Dịch
+                            vụ đáng tin cậy</h3>
+                        <p class="text-gray-400 text-base sm:text-lg leading-relaxed max-w-[95%]">
+                            Hệ thống mạnh mẽ của chúng tôi đảm bảo các liên kết rút gọn của bạn luôn chuyển hướng nhanh
+                            chóng và đáng tin cậy.
+                        </p>
+                    </div>
+                    <div
+                        class="feature-card bg-[#161B22] p-8 sm:p-10 rounded-xl shadow-2xl transition-all duration-400 ease-in-out border border-teal-600/20 flex flex-col items-center text-center relative overflow-hidden
+                                hover:translate-y-[-10px] hover:shadow-3xl hover:shadow-gray-900/80 hover:border-teal-500 group">
+                        <img src="https://placehold.co/100x100/00BCD4/0D1117?text=Gọn+gàng" alt="Biểu tượng gọn gàng"
+                            class="max-w-[100px] h-auto mb-5 sm:mb-6 rounded-full border-4 border-teal-500 shadow-xl shadow-teal-500/70 transition-all duration-400 ease-in-out
+                                    group-hover:scale-105 group-hover:shadow-2xl group-hover:shadow-teal-400">
+                        <h3 class="text-2xl sm:text-3xl text-teal-300 mb-4 sm:mb-5 font-extrabold drop-shadow-md">Gọn
+                            gàng & Súc tích</h3>
+                        <p class="text-gray-400 text-base sm:text-lg leading-relaxed max-w-[95%]">
+                            Nói lời tạm biệt với các URL dài, lộn xộn. Chia sẻ các liên kết thanh lịch và chuyên nghiệp
+                            một cách dễ dàng.
+                        </p>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="row justify-content-center mt-5" id="statsSection" style="display: none;">
-            <div class="col-lg-8">
-                <div class="stats-card p-4">
-                    <h5 class="mb-3">
-                        <i class="fas fa-chart-bar me-2"></i>Thống kê
-                    </h5>
-                    <div class="row text-center">
-                        <div class="col-md-6">
-                            <h3 class="text-primary mb-1" id="totalLinks">0</h3>
-                            <p class="text-muted small">Tổng số link đã tạo</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h3 class="text-success mb-1" id="lastCreated">-</h3>
-                            <p class="text-muted small">Link gần nhất</p>
-                        </div>
+        <section
+            class="mission py-20 sm:py-24 px-4 text-center bg-[#161B22] border-b border-teal-600/20 relative overflow-hidden">
+            <div class="container mx-auto">
+                <h2 class="text-4xl sm:text-5xl font-extrabold mb-10 sm:mb-12 text-teal-400 drop-shadow-md">Sứ mệnh của
+                    chúng tôi</h2>
+                <div
+                    class="max-w-2xl sm:max-w-4xl mx-auto bg-[#0D1117] p-8 sm:p-12 rounded-xl shadow-2xl border border-teal-600/30 animate-pop-in">
+                    <p class="text-base sm:text-lg text-gray-300 leading-relaxed mb-4 sm:mb-6">
+                        Tại Link3s, sứ mệnh của chúng tôi là đơn giản hóa thế giới trực tuyến bằng cách cung cấp một
+                        giải pháp rút gọn URL mạnh mẽ, đáng tin cậy và dễ sử dụng. Chúng tôi tin rằng việc chia sẻ liên
+                        kết nên nhanh chóng, hiệu quả và không gây phiền toái.
+                    </p>
+                    <p class="text-base sm:text-lg text-gray-300 leading-relaxed">
+                        Chúng tôi cam kết xây dựng một nền tảng không chỉ giúp bạn tiết kiệm không gian mà còn nâng cao
+                        trải nghiệm chia sẻ của bạn, giúp bạn kết nối với khán giả một cách hiệu quả hơn.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="achievements py-20 sm:py-24 px-4 text-center bg-[#0D1117] relative overflow-hidden">
+            <div class="container mx-auto">
+                <h2 class="text-4xl sm:text-5xl font-extrabold mb-10 sm:mb-12 text-teal-400 drop-shadow-md">Thành tựu
+                    của chúng tôi</h2>
+                <div
+                    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 sm:gap-10 max-w-xl sm:max-w-5xl mx-auto">
+                    <div class="achievement-card bg-[#161B22] p-8 sm:p-10 rounded-xl shadow-2xl border border-teal-600/20 transition-transform duration-300 hover:translate-y-[-5px] animate-pop-in"
+                        style="animation-delay: 0.1s;">
+                        <p class="text-5xl sm:text-6xl font-extrabold text-teal-300 mb-3 sm:mb-4">1M+</p>
+                        <p class="text-lg sm:text-xl text-gray-300">Liên kết được rút gọn</p>
+                    </div>
+                    <div class="achievement-card bg-[#161B22] p-8 sm:p-10 rounded-xl shadow-2xl border border-teal-600/20 transition-transform duration-300 hover:translate-y-[-5px] animate-pop-in"
+                        style="animation-delay: 0.2s;">
+                        <p class="text-5xl sm:text-6xl font-extrabold text-teal-300 mb-3 sm:mb-4">500K+</p>
+                        <p class="text-lg sm:text-xl text-gray-300">Lượt truy cập hàng ngày</p>
+                    </div>
+                    <div class="achievement-card bg-[#161B22] p-8 sm:p-10 rounded-xl shadow-2xl border border-teal-600/20 transition-transform duration-300 hover:translate-y-[-5px] animate-pop-in"
+                        style="animation-delay: 0.3s;">
+                        <p class="text-5xl sm:text-6xl font-extrabold text-teal-300 mb-3 sm:mb-4">99.9%</p>
+                        <p class="text-lg sm:text-xl text-gray-300">Thời gian hoạt động</p>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
+    </main>
 
-        <div class="row justify-content-center mt-5">
-            <div class="col-lg-10">
-                <h2 class="text-center text-white mb-5">Tại sao chọn TinyURL?</h2>
-                <div class="row">
-                    <div class="col-md-4 mb-4">
-                        <div class="feature-card text-center p-4">
-                            <div class="mb-3">
-                                <i class="fas fa-bolt fa-3x text-warning"></i>
-                            </div>
-                            <h5 class="mb-3">Nhanh chóng</h5>
-                            <p class="text-muted">Rút gọn URL trong vài giây với giao diện đơn giản</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-4">
-                        <div class="feature-card text-center p-4">
-                            <div class="mb-3">
-                                <i class="fas fa-shield-alt fa-3x text-success"></i>
-                            </div>
-                            <h5 class="mb-3">Đáng tin cậy</h5>
-                            <p class="text-muted">Hệ thống ổn định, bảo mật cao và hoạt động 24/7</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-4">
-                        <div class="feature-card text-center p-4">
-                            <div class="mb-3">
-                                <i class="fas fa-share-alt fa-3x text-info"></i>
-                            </div>
-                            <h5 class="mb-3">Dễ chia sẻ</h5>
-                            <p class="text-muted">Sao chép và chia sẻ URL rút gọn một cách dễ dàng</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <footer
+        class="bg-[#161B22] py-8 sm:py-10 text-center text-gray-400 text-sm sm:text-base border-t border-teal-600/10 shadow-inner shadow-gray-900/50">
+        <div class="container mx-auto px-4 sm:px-5">
+            <p>&copy; 2024 Link3s. Mọi quyền được bảo lưu.</p> <br>
+            <p>Develope by <a href="https://github.com/shyhubb">Shyhub</a> </p>
         </div>
+    </footer>
 
-        <div class="text-center mt-5">
-            <p class="text-white-50">© 2024 TinyURL. Tất cả quyền được bảo lưu.</p>
-        </div>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Global variables
-        let linkHistory = [];
-        let isLoading = false;
-        const BACKEND_URL = 'https://link3s.onrender.com'; // Base URL for your backend
+        // Constants from WebConstants.java
+        const PUBLIC_SHORT_LINK_API_V1_PATH = '/v1/public/shortlink';
+        const BASE_SHORT_URL_DOMAIN = 'https://link3s.onrender.com'; // Removed trailing slash for correct concatenation
+        const WEB_CONSTANTS_BASE_SUCCESS = 'Thành công.';
+        const WEB_CONSTANTS_CREATE_LINK_LIMIT = 'Bạn đã đạt giới hạn tạo Shortlink.'; // Assuming this is the message for 429
 
-        // DOM elements
-        const originalUrlInput = document.getElementById('originalUrl');
-        const submitBtn = document.getElementById('submitBtn');
-        const resetBtn = document.getElementById('resetBtn');
-        const errorAlert = document.getElementById('errorAlert');
-        const errorMessage = document.getElementById('errorMessage');
-        const resultCard = document.getElementById('resultCard');
-        const shortLinkResult = document.getElementById('shortLinkResult');
-        const originalLinkDisplay = document.getElementById('originalLinkDisplay');
-        const copyBtn = document.getElementById('copyBtn');
-        const copyText = document.getElementById('copyText');
-        const historyContent = document.getElementById('historyContent');
-        const emptyHistory = document.getElementById('emptyHistory');
-        const historyCount = document.getElementById('historyCount');
-        const clearHistoryBtn = document.getElementById('clearHistoryBtn');
-        const statsSection = document.getElementById('statsSection');
-        const totalLinks = document.getElementById('totalLinks');
-        const lastCreated = document.getElementById('lastCreated');
+        document.addEventListener('DOMContentLoaded', () => {
+            const shortenForm = document.getElementById('shortenForm');
+            const originalLinkInput = document.getElementById('originalLinkInput');
+            const shortenButton = document.getElementById('shortenButton');
+            const resultArea = document.getElementById('resultArea');
+            const shortLinkOutput = document.getElementById('shortLinkOutput');
+            const copyButton = document.getElementById('copyButton');
+            const errorMessage = document.getElementById('errorMessage');
 
-        // Server status elements
-        const checkServerStatusBtn = document.getElementById('checkServerStatusBtn');
-        const awakenServerLink = document.getElementById('awakenServerLink'); // Changed from button to anchor
-        const serverStatusIcon = document.getElementById('serverStatusIcon');
-        const serverStatusText = document.getElementById('serverStatusText');
-        const serverMessage = document.getElementById('serverMessage');
+            // Initialize resultArea and errorMessage to hidden state
+            resultArea.classList.add('hidden');
+            errorMessage.classList.add('hidden');
 
+            shortenForm.addEventListener('submit', async (event) => {
+                event.preventDefault(); // Ngăn chặn gửi biểu mẫu mặc định
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function () {
-            updateHistoryDisplay();
-            updateStats();
-            checkServerStatus(); // Check server status on load
-        });
-
-        // Utility functions
-        function isValidUrl(url) {
-            try {
-                new URL(url);
-                return true;
-            } catch {
-                return false;
-            }
-        }
-
-        function showError(message) {
-            errorMessage.textContent = message;
-            errorAlert.style.display = 'block';
-            setTimeout(() => {
-                errorAlert.style.display = 'none';
-            }, 5000);
-        }
-
-        function hideError() {
-            errorAlert.style.display = 'none';
-        }
-
-        function setLoading(loading) {
-            isLoading = loading;
-            if (loading) {
-                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Đang xử lý...';
-                submitBtn.disabled = true;
-                originalUrlInput.disabled = true;
-            } else {
-                submitBtn.innerHTML = '<i class="fas fa-arrow-right me-2"></i>Rút gọn URL';
-                submitBtn.disabled = false;
-                originalUrlInput.disabled = false;
-            }
-        }
-
-        // Server status functions
-        async function checkServerStatus() {
-            serverStatusIcon.innerHTML = '<span class="spinner-border spinner-border-sm text-info"></span>';
-            serverStatusText.textContent = 'Đang kiểm tra...';
-            checkServerStatusBtn.disabled = true;
-            awakenServerLink.style.display = 'none'; // Hide awaken link initially
-            serverMessage.textContent = '';
-
-            try {
-                // We'll still use the root URL to trigger the wake-up, or a /health if you have one.
-                // The key is to check the status code rather than just `response.ok`.
-                const response = await fetch(`${BACKEND_URL}/`, { // Changed back to /health or use any valid endpoint
-                    method: 'GET',
-                    cache: 'no-store' // Prevent caching issues
-                });
-
-                // Check for 200 OK or 302 Found (redirect often means it's waking up or routing)
-                if (response.status === 200 || response.status === 404) {
-                    serverStatusIcon.innerHTML = '<i class="fas fa-circle text-success"></i>';
-                    serverStatusText.textContent = 'Máy chủ đang hoạt động';
-                    serverMessage.textContent = 'Bạn có thể rút gọn URL ngay bây giờ.';
-                    awakenServerLink.style.display = 'none'; // Hide awaken link if active
-                } else {
-                    serverStatusIcon.innerHTML = '<i class="fas fa-circle text-danger"></i>';
-                    serverStatusText.textContent = 'Máy chủ đang ngủ';
-                    serverMessage.textContent = 'Vui lòng nhấn nút "Khởi động máy chủ" để đánh thức.';
-                    awakenServerLink.style.display = 'inline-flex'; // Show awaken link if sleeping
+                const originalLink = originalLinkInput.value.trim(); // Trim whitespace
+                if (!originalLink) {
+                    displayMessage('Vui lòng nhập một URL.', true);
+                    return;
                 }
-            } catch (error) {
-                console.error("Lỗi khi kiểm tra trạng thái máy chủ:", error);
-                serverStatusIcon.innerHTML = '<i class="fas fa-circle text-danger"></i>';
-                serverStatusText.textContent = 'Máy chủ không phản hồi';
-                serverMessage.textContent = 'Có lỗi kết nối. Vui lòng nhấn nút "Khởi động máy chủ" để thử lại.';
-                awakenServerLink.style.display = 'inline-flex'; // Show awaken link if error
-            } finally {
-                checkServerStatusBtn.disabled = false;
-            }
-        }
 
-        // Main functions
-        function createShortLink() {
-            const originalUrl = originalUrlInput.value.trim();
-
-            if (!originalUrl) {
-                showError('Vui lòng nhập URL cần rút gọn');
-                return;
-            }
-
-            if (!isValidUrl(originalUrl)) {
-                showError('URL không hợp lệ. Vui lòng nhập URL đúng định dạng (ví dụ: https://example.com)');
-                return;
-            }
-
-            setLoading(true);
-            hideError();
-            resultCard.style.display = 'none';
-
-            fetch(`${BACKEND_URL}/v1/public/shortlink/create`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    originalLink: originalUrl
-                })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.message === 'Success.' && data.data) {
-                        const shortUrl = data.data.shortLink;
-
-                        // Save to history
-                        saveToHistory(originalUrl, shortUrl);
-
-                        // Display result
-                        shortLinkResult.value = shortUrl;
-                        originalLinkDisplay.textContent = originalUrl;
-                        resultCard.style.display = 'block';
-                        resetBtn.style.display = 'block';
-
-                        // Update stats
-                        updateStats();
-                        checkServerStatus(); // Re-check server status after successful operation
-                    } else {
-                        showError(data.message || 'Có lỗi xảy ra khi tạo short link. Máy chủ có thể đang ngủ. Vui lòng thử khởi động lại máy chủ.');
+                // Simple URL validation
+                try {
+                    const url = new URL(originalLink);
+                    // Basic check for http/https protocol
+                    if (!['http:', 'https:'].includes(url.protocol)) {
+                        displayMessage('URL không hợp lệ. Vui lòng nhập URL bắt đầu bằng http:// hoặc https://', true);
+                        return;
                     }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    showError('Không thể kết nối đến server. Có thể máy chủ đang ngủ. Vui lòng nhấn "Khởi động máy chủ" để thử lại.');
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
-        }
+                } catch (e) {
+                    displayMessage('URL không hợp lệ. Vui lòng nhập đúng định dạng (ví dụ: https://example.com).', true);
+                    return;
+                }
 
-        function saveToHistory(originalUrl, shortUrl) {
-            const newEntry = {
-                id: Date.now(),
-                originalUrl: originalUrl,
-                shortUrl: shortUrl,
-                createdAt: new Date().toLocaleString('vi-VN')
-            };
+                // Hiển thị trạng thái tải
+                shortenButton.textContent = 'Đang rút gọn...';
+                shortenButton.disabled = true;
+                resultArea.classList.add('hidden'); // Hide result area
+                resultArea.classList.remove('animate-slideInUp'); // Reset animation
+                errorMessage.classList.add('hidden'); // Hide error message
 
-            linkHistory.unshift(newEntry);
+                try {
+                    // Xây dựng URL backend đầy đủ bằng BASE_SHORT_URL_DOMAIN
+                    const backendApiUrl = BASE_SHORT_URL_DOMAIN + PUBLIC_SHORT_LINK_API_V1_PATH + '/create';
 
-            // Keep only 10 most recent
-            if (linkHistory.length > 10) {
-                linkHistory = linkHistory.slice(0, 10);
-            }
+                    const response = await fetch(backendApiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ originalLink: originalLink }),
+                    });
 
-            updateHistoryDisplay();
-        }
+                    const data = await response.json();
+                    console.log('API Response:', data); // Log the full API response for debugging
 
-        function updateHistoryDisplay() {
-            historyCount.textContent = linkHistory.length;
+                    if (response.ok && data.message === WEB_CONSTANTS_BASE_SUCCESS) {
+                        if (data.data && data.data.shortLink) { // Ensure data.data and shortLink exist
+                            const shortCode = data.data.shortLink;
+                            shortLinkOutput.href = shortCode; // Construct full short URL for display
+                            shortLinkOutput.textContent = shortCode;
 
-            if (linkHistory.length === 0) {
-                emptyHistory.style.display = 'block';
-                historyContent.innerHTML = '';
-                clearHistoryBtn.style.display = 'none';
-            } else {
-                emptyHistory.style.display = 'none';
-                clearHistoryBtn.style.display = 'block';
+                            // Show result area and trigger animation
+                            resultArea.classList.remove('hidden'); // Make it display: block
+                            void resultArea.offsetWidth; // Force reflow to re-trigger animation
+                            resultArea.classList.add('animate-slideInUp'); // Add animation class back
 
-                const historyHtml = linkHistory.map(item => `
-                    <div class="history-item p-3 mb-3">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                            <small class="text-muted">${item.createdAt}</small>
-                            <div class="d-flex gap-2">
-                                <button class="btn btn-sm btn-outline-primary" onclick="copyHistoryLink('${item.shortUrl}')" title="Sao chép">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                                <a href="${item.shortUrl}" target="_blank" class="btn btn-sm btn-outline-success" title="Mở link">
-                                    <i class="fas fa-external-link-alt"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="mb-2">
-                            <small class="fw-bold text-muted">Short Link:</small>
-                            <div class="text-primary small text-break">${item.shortUrl}</div>
-                        </div>
-                        <div>
-                            <small class="fw-bold text-muted">URL gốc:</small>
-                            <div class="text-secondary small text-break">${item.originalUrl}</div>
-                        </div>
-                    </div>
-                `).join('');
-
-                historyContent.innerHTML = historyHtml;
-            }
-        }
-
-        function updateStats() {
-            if (linkHistory.length > 0) {
-                statsSection.style.display = 'block';
-                totalLinks.textContent = linkHistory.length;
-                lastCreated.textContent = linkHistory[0].createdAt.split(',')[0];
-            } else {
-                statsSection.style.display = 'none';
-            }
-        }
-
-        function copyToClipboard() {
-            const shortUrl = shortLinkResult.value;
-            navigator.clipboard.writeText(shortUrl).then(() => {
-                copyText.textContent = 'Đã sao chép!';
-                copyBtn.classList.remove('btn-primary');
-                copyBtn.classList.add('btn-success');
-
-                setTimeout(() => {
-                    copyText.textContent = 'Sao chép';
-                    copyBtn.classList.remove('btn-success');
-                    copyBtn.classList.add('btn-primary');
-                }, 2000);
-            }).catch(err => {
-                showError('Không thể sao chép link. Vui lòng thử lại.');
+                            displayMessage('', false); // Clear any previous error
+                        } else {
+                            displayMessage('Phản hồi API không hợp lệ: Thiếu dữ liệu shortLink.', true);
+                        }
+                    } else {
+                        let msg = data.message || 'Đã xảy ra lỗi không xác định.';
+                        if (response.status === 429) { // Quá nhiều yêu cầu
+                            msg = WEB_CONSTANTS_CREATE_LINK_LIMIT;
+                        } else if (response.status === 400) { // Yêu cầu không hợp lệ
+                            msg = data.message || 'URL hoặc yêu cầu không hợp lệ.';
+                        } else if (response.status === 500) { // Internal Server Error
+                            msg = 'Máy chủ gặp lỗi. Vui lòng thử lại sau ít phút.';
+                        }
+                        displayMessage(msg, true);
+                    }
+                } catch (error) {
+                    console.error('Lỗi fetch:', error);
+                    displayMessage('Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng hoặc thử lại.', true);
+                } finally {
+                    shortenButton.textContent = 'Rút gọn URL';
+                    originalLinkInput.value = ''; // Clear input field after attempt
+                    shortenButton.disabled = false;
+                }
             });
-        }
 
-        function copyHistoryLink(shortUrl) {
-            navigator.clipboard.writeText(shortUrl).then(() => {
-                // Simple success feedback
-                showError('Link đã được sao chép!');
-                setTimeout(() => hideError(), 2000);
-            }).catch(err => {
-                showError('Không thể sao chép link. Vui lòng thử lại.');
+            copyButton.addEventListener('click', () => {
+                const textToCopy = shortLinkOutput.textContent;
+                if (textToCopy) {
+                    // Sử dụng API Clipboard hiện đại nếu có
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(textToCopy).then(() => {
+                            copyButton.textContent = 'Đã sao chép!';
+                            setTimeout(() => {
+                                copyButton.textContent = 'Sao chép liên kết';
+                            }, 2000);
+                        }).catch(err => {
+                            console.error('Không thể sao chép bằng Clipboard API:', err);
+                            fallbackCopyTextToClipboard(textToCopy); // Sử dụng fallback nếu thất bại
+                        });
+                    } else {
+                        // Fallback cho các trình duyệt cũ hơn
+                        fallbackCopyTextToClipboard(textToCopy);
+                    }
+                }
             });
-        }
 
-        function clearHistory() {
-            if (confirm('Bạn có chắc chắn muốn xóa tất cả lịch sử?')) {
-                linkHistory = [];
-                updateHistoryDisplay();
-                updateStats();
+            function fallbackCopyTextToClipboard(text) {
+                const tempTextArea = document.createElement('textarea');
+                tempTextArea.value = text;
+                // Tránh làm mất vị trí cuộn trên iOS Safari.
+                tempTextArea.style.position = 'fixed';
+                tempTextArea.style.bottom = '0';
+                tempTextArea.style.left = '0';
+                document.body.appendChild(tempTextArea);
+                tempTextArea.focus();
+                tempTextArea.select();
+                try {
+                    document.execCommand('copy');
+                    copyButton.textContent = 'Đã sao chép!';
+                    setTimeout(() => {
+                        copyButton.textContent = 'Sao chép liên kết';
+                    }, 2000);
+                } catch (err) {
+                    console.error('Không thể sao chép bằng execCommand:', err);
+                    alert('Xin lỗi, không thể sao chép tự động. Vui lòng sao chép thủ công: ' + text);
+                } finally {
+                    document.body.removeChild(tempTextArea);
+                }
             }
-        }
 
-        function resetForm() {
-            originalUrlInput.value = '';
-            resultCard.style.display = 'none';
-            resetBtn.style.display = 'none';
-            hideError();
-            originalUrlInput.focus();
-        }
-
-        function clearInput() {
-            originalUrlInput.value = '';
-            originalUrlInput.focus();
-        }
-
-        function handleKeyPress(event) {
-            if (event.key === 'Enter' && !isLoading) {
-                createShortLink();
+            function displayMessage(message, isError) {
+                if (isError) {
+                    errorMessage.textContent = message;
+                    errorMessage.classList.remove('hidden'); // Show error
+                    errorMessage.classList.add('active'); // Trigger error animation if any
+                    resultArea.classList.add('hidden'); // Hide result area
+                    resultArea.classList.remove('active'); // Remove active class
+                } else {
+                    errorMessage.textContent = '';
+                    errorMessage.classList.add('hidden'); // Hide error
+                    errorMessage.classList.remove('active'); // Remove active class
+                }
             }
-        }
-
-        // Tab switching event
-        document.querySelectorAll('[data-bs-toggle="tab"]').forEach(tab => {
-            tab.addEventListener('shown.bs.tab', function () {
-                updateHistoryDisplay();
-                updateStats();
-            });
         });
     </script>
 </body>

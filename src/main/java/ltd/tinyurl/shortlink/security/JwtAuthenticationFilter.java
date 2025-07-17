@@ -35,7 +35,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+    protected void doFilterInternal(@SuppressWarnings("null") HttpServletRequest request,
+            @SuppressWarnings("null") HttpServletResponse response, @SuppressWarnings("null") FilterChain filterChain)
             throws ServletException, IOException { // Simplified throws clause for standard IOException
 
         String authHeader = request.getHeader("Authorization");
@@ -53,7 +54,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 account = jwtTokenProvider.getAccountFromToken(token);
                 logger.debug("Extracted account from token: {}", account);
-            } catch (SignatureException ex) {
+            } catch (@SuppressWarnings("deprecation") SignatureException ex) {
                 logger.error("Invalid JWT signature: {}", ex.getMessage());
                 // Handle response for invalid signature if needed (e.g., send 401 Unauthorized)
                 // response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

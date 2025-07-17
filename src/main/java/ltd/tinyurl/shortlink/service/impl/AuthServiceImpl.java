@@ -9,6 +9,7 @@ import ltd.tinyurl.shortlink.dto.response.BaseResponse;
 import ltd.tinyurl.shortlink.dto.response.LoginResponse;
 import ltd.tinyurl.shortlink.entity.Role;
 import ltd.tinyurl.shortlink.entity.User;
+import ltd.tinyurl.shortlink.entity.Wallet;
 import ltd.tinyurl.shortlink.repository.RoleRepository;
 import ltd.tinyurl.shortlink.repository.UserRepository;
 import ltd.tinyurl.shortlink.security.JwtTokenProvider;
@@ -23,13 +24,16 @@ public class AuthServiceImpl implements AuthService {
 
     private final RoleRepository roleRepository;
 
+    private final WalletServiceImpl walletServiceImpl;
+
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public AuthServiceImpl(UserRepository userRepository, JwtTokenProvider jwtTokenProvider,
-            RoleRepository roleRepository) {
+            RoleRepository roleRepository, WalletServiceImpl walletServiceImpl) {
         this.userRepository = userRepository;
         this.jwtTokenProvider = jwtTokenProvider;
         this.roleRepository = roleRepository;
+        this.walletServiceImpl = walletServiceImpl;
     }
 
     @Override
@@ -49,8 +53,11 @@ public class AuthServiceImpl implements AuthService {
         user.setAccount(account);
         user.setPassword(passwordEncoder.encode(password));
         user.setRole(role);
+        Wallet wallet = new Wallet();
+        wallet.setUser(user);
 
         userRepository.save(user);
+        walletServiceImpl.createWallet(wallet);
 
         return new BaseResponse<>(WebConstants.BASE_SUCCESS, null);
     }
