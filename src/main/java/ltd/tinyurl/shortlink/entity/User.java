@@ -1,5 +1,6 @@
 package ltd.tinyurl.shortlink.entity;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -21,9 +22,12 @@ public class User {
     private Long id;
     private String account;
     private String password;
-
     private String name;
     private String email;
+    private LocalDateTime createAt;
+    private LocalDateTime updateAt;
+    private String bankName;
+    private String bankAdress;
 
     @OneToMany(mappedBy = "user")
     private List<Link> links;
