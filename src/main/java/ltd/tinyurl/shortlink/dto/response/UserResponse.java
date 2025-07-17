@@ -10,6 +10,7 @@ public class UserResponse {
     private String name;
     private String email;
     private Double balance;
+    private String role;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
     private String bankName;

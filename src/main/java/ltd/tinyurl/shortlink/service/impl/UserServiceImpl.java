@@ -42,6 +42,7 @@ public class UserServiceImpl implements UserService {
         userResponse.setBankAdress(user.getBankAdress());
         userResponse.setCreateAt(user.getCreateAt());
         userResponse.setUpdateAt(user.getUpdateAt());
+        userResponse.setRole(user.getRole().getRoleName());
         userResponse.setBankName(user.getBankName());
 
         return new BaseResponse<UserResponse>(WebConstants.BASE_SUCCESS, userResponse);
