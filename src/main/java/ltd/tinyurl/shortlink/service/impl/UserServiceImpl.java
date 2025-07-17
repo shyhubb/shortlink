@@ -1,9 +1,11 @@
 package ltd.tinyurl.shortlink.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import lombok.Data;
+import ltd.tinyurl.shortlink.dto.request.ProfileRequest;
 import ltd.tinyurl.shortlink.dto.response.BaseResponse;
 import ltd.tinyurl.shortlink.dto.response.UserResponse;
 import ltd.tinyurl.shortlink.entity.User;
@@ -43,5 +45,26 @@ public class UserServiceImpl implements UserService {
         userResponse.setBankName(user.getBankName());
 
         return new BaseResponse<UserResponse>(WebConstants.BASE_SUCCESS, userResponse);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public BaseResponse updateProfile(ProfileRequest profileRequest) {
+        String name = profileRequest.getName();
+        String email = profileRequest.getEmail();
+        String bankName = profileRequest.getBankName();
+        String bankAdress = profileRequest.getBankAdress();
+
+        User user = currentUserDetails.getUserDetails();
+        user.setBankAdress(bankAdress);
+        user.setBankName(bankName);
+        user.setEmail(email);
+        user.setName(name);
+        user.setUpdateAt(LocalDateTime.now());
+
+        userRepository.save(user);
+
+        return new BaseResponse(WebConstants.BASE_SUCCESS, null);
+
     }
 }
