@@ -11,4 +11,6 @@ public interface UserService {
     public BaseResponse updateProfile(ProfileRequest profileRequest);
 
     public BaseResponse<ManagerUserResponse> managerUsers();
+
+    public BaseResponse deleteById(Long id);
 }

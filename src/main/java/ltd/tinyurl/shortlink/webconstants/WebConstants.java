@@ -25,9 +25,10 @@ public class WebConstants {
 
     public static final String ADMIN_API_V1_PATH = API_VERSION_V1 + "/admin";
     // for User service
-    public static final String PASSWORD_OR_ACCOUNT_NOT_EXACTLY = "Tài khoản hoặc mật khẩu không đúng.";
+    public static final String PASSWORD_OR_ACCOUNT_NOT_EXACTLY = "Tài khoản hoặc mật khẩu không chính xác.";
     public static final String CONFIRM_PASSWORD_NOT_MACTH = "Mật khẩu xác nhận không khớp.";
     public static final String ACCOUNT_EXITS = "Tài khoản này đã tồn tại.";
+    public static final String ACCOUNT_DOES_NOT_EXITS = "Tài khoản không tồn tại.";
     public static final String ROLE_ADMIN = "ADMIN";
     public static final String ROLE_USER = "USER";
     public static final String SYSTEM_ERROR_FIND_ROLE = "Lỗi không tìm thấy quyền tài khoản.";

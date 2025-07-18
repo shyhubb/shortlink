@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 import lombok.Data;
 import ltd.tinyurl.shortlink.dto.request.ProfileRequest;
@@ -35,11 +34,10 @@ public class UserServiceImpl implements UserService {
         if (userOptional.isPresent()) {
             user = userOptional.get();
         }
-        Double userBalance = walletServiceImpl.getBalance();
 
         UserResponse userResponse = new UserResponse();
         userResponse.setAccount(user.getAccount());
-        userResponse.setBalance(userBalance);
+        userResponse.setBalance(user.getWallet().getBalance());
         userResponse.setName(user.getName());
         userResponse.setEmail(user.getEmail());
         userResponse.setBankAdress(user.getBankAdress());
@@ -80,11 +78,10 @@ public class UserServiceImpl implements UserService {
             return new BaseResponse<ManagerUserResponse>(WebConstants.DONT_HAVE_USER_IN_SYSTEM, null);
         List<UserResponse> userResponses = new ArrayList<>();
         for (User user : users) {
-            Double userBalance = walletServiceImpl.getBalance();
-
             UserResponse userResponse = new UserResponse();
+            userResponse.setId(user.getId());
             userResponse.setAccount(user.getAccount());
-            userResponse.setBalance(userBalance);
+            userResponse.setBalance(user.getWallet().getBalance());
             userResponse.setName(user.getName());
             userResponse.setEmail(user.getEmail());
             userResponse.setBankAdress(user.getBankAdress());
@@ -99,5 +96,14 @@ public class UserServiceImpl implements UserService {
         managerUserResponse.setCount(count);
         managerUserResponse.setUsers(userResponses);
         return new BaseResponse<ManagerUserResponse>(WebConstants.BASE_SUCCESS, managerUserResponse);
+    }
+
+    @Override
+    public BaseResponse<String> deleteById(Long id) {
+        if (!userRepository.findById(id).isPresent())
+            return new BaseResponse<String>(WebConstants.ACCOUNT_DOES_NOT_EXITS, null);
+        userRepository.deleteById(id);
+
+        return new BaseResponse<String>(WebConstants.BASE_SUCCESS, null);
     }
 }
