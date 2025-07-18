@@ -20,6 +20,7 @@ public class WebConstants {
     public static final String BASE_SUCCESS = "Thành công.";
     public static final String BASE_FAIL = "Thất bại.";
     // for User service
+    public static final String PASSWORD_OR_ACCOUNT_NOT_EXACTLY = "Tài khoản hoặc mật khẩu không đúng.";
     public static final String CONFIRM_PASSWORD_NOT_MACTH = "Mật khẩu xác nhận không khớp.";
     public static final String ACCOUNT_EXITS = "Tài khoản này đã tồn tại.";
     public static final String ROLE_ADMIN = "ADMIN";

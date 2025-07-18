@@ -72,6 +72,6 @@ public class AuthServiceImpl implements AuthService {
             loginResponse.setToken(token);
             return new BaseResponse<LoginResponse>(WebConstants.BASE_SUCCESS, loginResponse);
         }
-        return new BaseResponse<LoginResponse>(WebConstants.BASE_FAIL, null);
+        return new BaseResponse<LoginResponse>(WebConstants.PASSWORD_OR_ACCOUNT_NOT_EXACTLY, null);
     }
 }
