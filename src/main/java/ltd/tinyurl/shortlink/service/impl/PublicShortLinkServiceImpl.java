@@ -28,6 +28,10 @@ public class PublicShortLinkServiceImpl implements PublicShortLinkService {
             return new BaseResponse<CreateLinkResponse>(WebConstants.LIMIT_CREATE_LINK_ERROR, null);
         }
 
+        if (linkRequest.getOriginalLink().startsWith(WebConstants.BASE_SHORT_URL_DOMAIN)) {
+            return new BaseResponse<CreateLinkResponse>(WebConstants.ERROR_SHORTLINK_START_WITH_BASE_URL, null);
+        }
+
         String originLink = linkRequest.getOriginalLink();
         StringBuilder shortLink = new StringBuilder();
         String shortCode = shortlinkServiceImpl.generateUrl();

@@ -30,7 +30,7 @@ public class ShortlinkServiceImpl implements ShortlinkService {
     private final CurrentUserDetails currentUserDetails;
 
     @Override
-    public BaseResponse<CreateLinkResponse> generateShortLink(LinkRequest linkPublicRequest, String clientIp) {
+    public BaseResponse<CreateLinkResponse> generateShortLink(LinkRequest linkRequest, String clientIp) {
         LocalDateTime time = LocalDateTime.now().minusHours(WebConstants.TIME_CREATE_LINK_LIMIT);
         int countLink = linkRepository.countByClientIpAndUpdateAtAfter(clientIp,
                 time);
@@ -38,7 +38,11 @@ public class ShortlinkServiceImpl implements ShortlinkService {
             return new BaseResponse<CreateLinkResponse>(WebConstants.LIMIT_CREATE_LINK_ERROR, null);
         }
 
-        String originLink = linkPublicRequest.getOriginalLink();
+        if (linkRequest.getOriginalLink().startsWith(WebConstants.BASE_SHORT_URL_DOMAIN)) {
+            return new BaseResponse<CreateLinkResponse>(WebConstants.ERROR_SHORTLINK_START_WITH_BASE_URL, null);
+        }
+
+        String originLink = linkRequest.getOriginalLink();
         StringBuilder shortLink = new StringBuilder();
         String shortCode = generateUrl();
         shortLink.append(WebConstants.BASE_SHORT_URL_DOMAIN + shortCode);
@@ -70,6 +74,10 @@ public class ShortlinkServiceImpl implements ShortlinkService {
 
         if (customShortCode.length() < WebConstants.LENGTH_KEY_URL) {
             return new BaseResponse<CreateLinkResponse>(WebConstants.SHORT_CODE_LENGTH_ERROR, null);
+        }
+
+        if (customLinkRequest.getOriginalLink().startsWith(WebConstants.BASE_SHORT_URL_DOMAIN)) {
+            return new BaseResponse<CreateLinkResponse>(WebConstants.ERROR_SHORTLINK_START_WITH_BASE_URL, null);
         }
         LocalDateTime time = LocalDateTime.now().minusHours(WebConstants.TIME_CREATE_LINK_LIMIT);
         int countLink = linkRepository.countByClientIpAndUpdateAtAfter(clientIpAddress, time);
