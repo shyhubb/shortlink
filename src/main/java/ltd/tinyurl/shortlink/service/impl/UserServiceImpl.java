@@ -1,12 +1,15 @@
 package ltd.tinyurl.shortlink.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import lombok.Data;
 import ltd.tinyurl.shortlink.dto.request.ProfileRequest;
 import ltd.tinyurl.shortlink.dto.response.BaseResponse;
+import ltd.tinyurl.shortlink.dto.response.ManagerUserResponse;
 import ltd.tinyurl.shortlink.dto.response.UserResponse;
 import ltd.tinyurl.shortlink.entity.User;
 import ltd.tinyurl.shortlink.repository.UserRepository;
@@ -67,5 +70,34 @@ public class UserServiceImpl implements UserService {
 
         return new BaseResponse(WebConstants.BASE_SUCCESS, null);
 
+    }
+
+    @Override
+    public BaseResponse<ManagerUserResponse> managerUsers() {
+        List<User> users = userRepository.findAll();
+        int count = users.size();
+        if (users.isEmpty())
+            return new BaseResponse<ManagerUserResponse>(WebConstants.DONT_HAVE_USER_IN_SYSTEM, null);
+        List<UserResponse> userResponses = new ArrayList<>();
+        for (User user : users) {
+            Double userBalance = walletServiceImpl.getBalance();
+
+            UserResponse userResponse = new UserResponse();
+            userResponse.setAccount(user.getAccount());
+            userResponse.setBalance(userBalance);
+            userResponse.setName(user.getName());
+            userResponse.setEmail(user.getEmail());
+            userResponse.setBankAdress(user.getBankAdress());
+            userResponse.setCreateAt(user.getCreateAt());
+            userResponse.setUpdateAt(user.getUpdateAt());
+            userResponse.setRole(user.getRole().getRoleName());
+            userResponse.setBankName(user.getBankName());
+
+            userResponses.add(userResponse);
+        }
+        ManagerUserResponse managerUserResponse = new ManagerUserResponse();
+        managerUserResponse.setCount(count);
+        managerUserResponse.setUsers(userResponses);
+        return new BaseResponse<ManagerUserResponse>(WebConstants.BASE_SUCCESS, managerUserResponse);
     }
 }

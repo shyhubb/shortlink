@@ -20,6 +20,10 @@ public class WebConstants {
     public static final String BASE_SUCCESS = "Thành công.";
     public static final String BASE_FAIL = "Thất bại.";
     public static final String ERROR_SHORTLINK_START_WITH_BASE_URL = "Không được phép rút gọn liên kết gốc server.";
+
+    public static final String DONT_HAVE_USER_IN_SYSTEM = "Chưa có người dùng nào trong hệ thống.";
+
+    public static final String ADMIN_API_V1_PATH = API_VERSION_V1 + "/admin";
     // for User service
     public static final String PASSWORD_OR_ACCOUNT_NOT_EXACTLY = "Tài khoản hoặc mật khẩu không đúng.";
     public static final String CONFIRM_PASSWORD_NOT_MACTH = "Mật khẩu xác nhận không khớp.";
