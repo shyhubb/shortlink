@@ -10,7 +10,7 @@ public class WebConstants {
     public static final String PRIVATE_SHORT_LINK_API_V1_PATH = API_VERSION_V1 + "/user/link";
     public static final String AUTH_API_V1_PATH = API_VERSION_V1 + "/auth";
     public static final String USER_API_V1_PATH = API_VERSION_V1 + "/user";
-    public static final String BASE_SHORT_URL_DOMAIN = "https://link3s.onrender.com/";
+    public static final String BASE_SHORT_URL_DOMAIN = "https://linkz.onrender.com";
     public static final String URL_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     public static final int LENGTH_KEY_URL = 6;
     public static final int MAX_ATTEMPTS_GENERATE_KEY = 10;
