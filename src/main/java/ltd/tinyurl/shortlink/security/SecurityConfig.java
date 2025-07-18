@@ -43,6 +43,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**").permitAll() // Các endpoint liên quan đến xác thực (đăng ký, đăng
                                                                  // nhập) được phép truy cập công khai
                         .requestMatchers("/v1/user/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/v1/admin/**").hasRole("ADMIN")
 
                         // Các endpoint bắt đầu bằng /admin/ CHỈ được
                         // phép cho người dùng có vai trò ADMIN
