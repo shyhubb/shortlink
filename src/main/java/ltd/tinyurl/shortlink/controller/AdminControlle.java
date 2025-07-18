@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class AdminControlle {
     private final UserServiceImpl userServiceImpl;
 
-    @GetMapping("/manageruser")
+    @GetMapping("/managerusers")
     public ResponseEntity<BaseResponse> managerUser() {
         BaseResponse managerUser = userServiceImpl.managerUsers();
         String message = managerUser.getMessage();
