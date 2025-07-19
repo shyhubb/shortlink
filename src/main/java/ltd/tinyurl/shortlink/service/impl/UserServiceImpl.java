@@ -100,10 +100,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public BaseResponse<String> deleteById(Long id) {
-        if (!userRepository.findById(id).isPresent())
+        Optional<User> user = userRepository.findById(id);
+        if (!user.isPresent())
             return new BaseResponse<String>(WebConstants.ACCOUNT_DOES_NOT_EXITS, null);
+        if (id == user.get().getId())
+            return new BaseResponse<String>(WebConstants.ERROR_DELETE_THIS_ADMIN, null);
         userRepository.deleteById(id);
-
         return new BaseResponse<String>(WebConstants.BASE_SUCCESS, null);
     }
 }

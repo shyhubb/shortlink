@@ -35,6 +35,8 @@ public class AdminControlle {
         String message = deleteUser.getMessage();
         if (message.equals(WebConstants.BASE_SUCCESS))
             return new ResponseEntity<BaseResponse<String>>(deleteUser, HttpStatus.OK);
+        if (message.equals(WebConstants.ERROR_DELETE_THIS_ADMIN))
+            return new ResponseEntity<BaseResponse<String>>(deleteUser, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<BaseResponse<String>>(deleteUser, HttpStatus.NOT_FOUND);
 
     }
