@@ -1,11 +1,6 @@
 INSERT IGNORE INTO role (role_name , id) VALUES ('USER' , 1);
 INSERT IGNORE INTO role (role_name , id) VALUES ('ADMIN', 2);
 
--- data.sql
-
--- Chèn dữ liệu vào bảng cpm_rate
--- Lưu ý: ID sẽ tự động tăng (AUTO_INCREMENT) nếu dùng GenerationType.IDENTITY
--- data.sql (dành cho PostgreSQL / H2)
 
 INSERT IGNORE INTO cpm_rate (country, cpm) VALUES
 ('United States', 8.50),
@@ -24,4 +19,11 @@ INSERT IGNORE INTO cpm_rate (country, cpm) VALUES
 ('Indonesia', 2.00),
 ('Thailand', 2.20),
 ('Philippines', 1.90),
-('Malaysia', 2.10)
+('Malaysia', 2.10);
+
+
+INSERT IGNORE INTO wallet (id, balance) VALUES (1, 0.0);
+
+
+INSERT IGNORE INTO user (id, account, password, name, email, create_at, update_at, bank_name, bank_adress, role_id, wallet_id) VALUES
+(1, 'admin', '$2a$10$4V4.KgBvXHcNd4j8a4Ml0eElFd5MNVqTePHietnkaWtWutGZ4EY86', 'Admin', 'admin@example.com', NOW(), NOW(), 'Vietcombank', 'Hanoi', 2, 1);
