@@ -41,6 +41,10 @@ public class AuthServiceImpl implements AuthService {
             return new BaseResponse<>(WebConstants.CONFIRM_PASSWORD_NOT_MACTH, null);
         if (userRepository.existsByAccount(account))
             return new BaseResponse<>(WebConstants.ACCOUNT_EXITS, null);
+        if (account.length() < WebConstants.ERROR_LENGTH_ACCOUNT)
+            return new BaseResponse<>(WebConstants.ERROR_LENGTH_ACCOUNT_MESSAGE, null);
+        if (account.contains(" "))
+            return new BaseResponse<>(WebConstants.ERROR_SYNTAX_ACCOUNT, null);
         User user = new User();
         Optional<Role> roleOptional = roleRepository.findByRoleName(WebConstants.ROLE_USER);
         if (!roleOptional.isPresent())

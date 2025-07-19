@@ -19,7 +19,8 @@ INSERT IGNORE INTO cpm_rate (country, cpm) VALUES
 ('Indonesia', 2.00),
 ('Thailand', 2.20),
 ('Philippines', 1.90),
-('Malaysia', 2.10);
+('Malaysia', 2.10),
+('Other', 2.00);
 
 
 INSERT IGNORE INTO wallet (id, balance) VALUES (1, 0.0);

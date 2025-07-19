@@ -21,6 +21,9 @@ public class WebConstants {
     public static final String BASE_SUCCESS = "Thành công.";
     public static final String BASE_FAIL = "Thất bại.";
     public static final String ERROR_SHORTLINK_START_WITH_BASE_URL = "Không được phép rút gọn liên kết gốc server.";
+    public static final int ERROR_LENGTH_ACCOUNT = 6;
+    public static final String ERROR_LENGTH_ACCOUNT_MESSAGE = "Tài khoản ít nhất phải đủ 6 kí tự";
+    public static final String ERROR_SYNTAX_ACCOUNT = "Tài khoản không được chứa kí tự trắng hoặc dấu cách.";
 
     public static final String DONT_HAVE_USER_IN_SYSTEM = "Chưa có người dùng nào trong hệ thống.";
     public static final String ERROR_DELETE_THIS_ADMIN = "Không thể xóa tài khoản của bạn.";
