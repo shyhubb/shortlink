@@ -27,15 +27,34 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .csrf(csrf -> csrf.disable())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Thêm CORS
+                .csrf(csrf -> csrf.disable()) // Tắt CSRF cho REST API (thường làm)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Ứng
+                                                                                                              // dụng
+                                                                                                              // không
+                                                                                                              // giữ
+                                                                                                              // trạng
+                                                                                                              // thái
+                                                                                                              // session
+                                                                                                              // (phù
+                                                                                                              // hợp
+                                                                                                              // JWT)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/auth/**").permitAll() // Các endpoint liên quan đến xác thực (đăng ký, đăng
+                                                                 // nhập) được phép truy cập công khai
                         .requestMatchers("/v1/user/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/v1/admin/**").hasRole("ADMIN")
-                        .anyRequest().permitAll())
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+                        // Các endpoint bắt đầu bằng /admin/ CHỈ được
+                        // phép cho người dùng có vai trò ADMIN
+                        .anyRequest().permitAll()) // TẤT CẢ CÁC YÊU CẦU KHÁC (không khớp /auth/** và /admin/**) được
+                                                   // phép truy cập công khai
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Thêm JWT
+                                                                                                       // Filter trước
+                                                                                                       // bộ lọc xác
+                                                                                                       // thực
+                                                                                                       // Username/Password
+                                                                                                       // mặc định
 
         return http.build();
     }
@@ -43,20 +62,22 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("https://cluq.free.nf")); // Đặt đúng domain FE ở đây!
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowCredentials(true);
-        configuration.setExposedHeaders(Arrays.asList("Authorization"));
+        configuration.setAllowedOriginPatterns(Arrays.asList("*")); // Cho phép tất cả origins (trong môi trường
+                                                                    // dev/test)
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Cho phép các
+                                                                                                   // phương thức HTTP
+        configuration.setAllowedHeaders(Arrays.asList("*")); // Cho phép tất cả các header
+        configuration.setAllowCredentials(true); // Cho phép gửi cookie, header Authorization
+        configuration.setExposedHeaders(Arrays.asList("Authorization")); // Cho phép client đọc header Authorization
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration("/**", configuration); // Áp dụng cấu hình CORS cho tất cả các đường dẫn
         return source;
     }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
             throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+        return authenticationConfiguration.getAuthenticationManager(); // Bean quản lý xác thực
     }
 }
