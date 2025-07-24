@@ -107,21 +107,7 @@ Dự án được tổ chức theo cấu trúc chuẩn của Spring Boot, với 
 
 ---
 
-## 🌐 API Endpoint Đã Triển Khai
 
-Backend của dịch vụ đã được triển khai và có thể truy cập công khai tại:
-
-**`https://link3s.onrender.com/`**
-
-Bạn có thể sử dụng các endpoint này để tương tác với dịch vụ. Ví dụ:
-
-* **Đăng ký:** `POST https://link3s.onrender.com/v1/auth/register`
-* **Đăng nhập:** `POST https://link3s.onrender.com/v1/auth/login`
-* **Tạo link ngẫu nhiên (công khai):** `POST https://link3s.onrender.com/v1/public/shortlink/create`
-* **Tạo link tùy chỉnh (yêu cầu JWT):** `POST https://link3s.onrender.com/v1/user/link/create/custom`
-* **Chuyển hướng link:** `GET https://link3s.onrender.com/{shortCode}`
-
----
 
 ## 🤝 Đóng góp
 
