@@ -1,5 +1,6 @@
 package ltd.tinyurl.shortlink.service;
 
+import ltd.tinyurl.shortlink.dto.request.ChangePasswordRequest;
 import ltd.tinyurl.shortlink.dto.request.ProfileRequest;
 import ltd.tinyurl.shortlink.dto.response.BaseResponse;
 import ltd.tinyurl.shortlink.dto.response.ManagerUserResponse;
@@ -13,4 +14,6 @@ public interface UserService {
     public BaseResponse<ManagerUserResponse> managerUsers();
 
     public BaseResponse deleteById(Long id);
+
+    public BaseResponse<String> changePassword(ChangePasswordRequest changePasswordRequest);
 }

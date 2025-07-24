@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cluq - Quản lý người dùng</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom CSS for animations and specific properties not in Tailwind */
+        body {
+            background-image: radial-gradient(circle at top left, rgba(0, 188, 212, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at bottom right, rgba(0, 188, 212, 0.1) 0%, transparent 40%);
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            animation: backgroundShift 20s infinite alternate;
+        }
+
+        @keyframes backgroundShift {
+            0% {
+                background-position: 0% 0%, 100% 100%;
+            }
+
+            100% {
+                background-position: 100% 100%, 0% 0%;
+            }
+        }
+
+        .backdrop-blur-md {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .animate-fadeIn {
+            animation: fadeIn 1s ease-out forwards;
+            opacity: 0;
+            will-change: transform, opacity;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .shine-effect::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: all 0.4s ease-out;
+            will-change: transform;
+        }
+
+        .shine-effect:hover::before {
+            left: 100%;
+        }
+
+        /* Modal specific styles */
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1000;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgba(0, 0, 0, 0.6);
+            /* Black w/ opacity */
+            backdrop-filter: blur(5px);
+            /* Blur behind modal */
+            -webkit-backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #161B22;
+            margin: auto;
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 188, 212, 0.3);
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: fadeInScale 0.3s ease-out forwards;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Confirmation Modal specific styles */
+        #confirmationModal .modal-content {
+            max-width: 450px;
+            /* Smaller for confirmation */
+            text-align: center;
+        }
+
+        #confirmationModal p {
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            color: #C9D1D9;
+        }
+
+        #confirmationModal .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        #confirmationModal button {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        #confirmationModal #confirmDeleteBtn {
+            background-color: #dc2626;
+            /* Red-600 */
+            color: white;
+        }
+
+        #confirmationModal #confirmDeleteBtn:hover {
+            background-color: #b91c1c;
+            /* Red-700 */
+            transform: translateY(-1px);
+        }
+
+        #confirmationModal #cancelDeleteBtn {
+            background-color: #4b5563;
+            /* Gray-600 */
+            color: white;
+        }
+
+        #confirmationModal #cancelDeleteBtn:hover {
+            background-color: #374151;
+            /* Gray-700 */
+            transform: translateY(-1px);
+        }
+
+        #confirmationModal #confirmationErrorMessage {
+            color: #ef4444;
+            /* Red-500 */
+            margin-top: 15px;
+            font-size: 0.95rem;
+            display: none;
+            /* Hidden by default */
+        }
+
+
+        /* Responsive Optimization for Mobile Performance */
+        @media (max-width: 767px) {
+            body {
+                animation: none;
+                /* Disable backgroundShift on mobile */
+                background-image: none;
+                /* Remove radial gradients for body */
+            }
+
+            h1 {
+                font-size: 2.5rem !important;
+                /* Smaller on mobile */
+            }
+
+            p {
+                font-size: 1rem !important;
+                /* Smaller on mobile */
+            }
+
+            h2 {
+                font-size: 2rem !important;
+                /* Smaller on mobile */
+            }
+
+            input,
+            button {
+                font-size: 0.9rem !important;
+                /* Smaller input/button text */
+                padding: 10px 15px !important;
+                /* Smaller padding */
+            }
+
+            .text-lg {
+                font-size: 0.9rem !important;
+            }
+
+            .text-xl {
+                font-size: 1rem !important;
+            }
+
+            .text-sm {
+                font-size: 0.8rem !important;
+            }
+
+            .text-base {
+                font-size: 0.85rem !important;
+            }
+
+            .text-4xl {
+                font-size: 2rem !important;
+            }
+
+            .text-5xl {
+                font-size: 2.5rem !important;
+            }
+
+            .table-container {
+                overflow-x: auto;
+                /* Allows horizontal scrolling for table */
+                -webkit-overflow-scrolling: touch;
+                /* Smooth scrolling on iOS */
+            }
+
+            table {
+                min-width: 700px;
+                /* Ensure table content is not too cramped for details */
+            }
+
+            th,
+            td {
+                padding: 0.5rem 0.75rem !important;
+                /* Smaller padding for table cells */
+            }
+
+            #sidebar {
+                width: 80%;
+                max-width: 300px;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+
+            .close-button {
+                font-size: 24px;
+                top: 5px;
+                right: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body
+    class="font-inter antialiased bg-[#0D1117] text-[#C9D1D9] leading-relaxed overflow-x-hidden min-h-screen flex flex-col">
+    <header
+        class="bg-[#161B22] bg-opacity-80 backdrop-blur-md py-3 shadow-2xl flex justify-between items-center sticky top-0 z-50 border-b border-teal-600/20">
+        <div class="container mx-auto px-4 sm:px-6 flex justify-between items-center w-full">
+            <a href="http://127.0.0.1:5500/FE/dashboard.html" class="text-4xl sm:text-5xl font-extrabold text-teal-400 no-underline inline-block transition-all duration-300 ease-in-out ml-2 sm:ml-4
+                      hover:text-teal-300 drop-shadow-lg hover:drop-shadow-xl z-[1001]">
+                Cluq
+            </a>
+            <nav class="mr-2 sm:mr-4 flex items-center">
+                <button id="sidebarToggleBtn"
+                    class="text-gray-100 ml-4 p-2 rounded-md hover:bg-teal-700/30 transition-colors duration-200 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+                <button id="logoutButton" class="text-sm sm:text-base text-gray-100 no-underline font-semibold ml-4 sm:ml-6 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl transition-all duration-300 ease-in-out relative overflow-hidden shine-effect
+                          hover:bg-red-700 hover:text-white hover:translate-y-[-2px] z-[1001]">
+                    Đăng xuất
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow py-10 px-4 animate-fadeIn">
+        <div class="container mx-auto max-w-6xl">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-center mb-8 text-teal-400 drop-shadow-md">Quản lý người
+                dùng</h1>
+            <p class="text-lg text-gray-300 text-center mb-10">Xem và quản lý tất cả người dùng trong hệ thống.</p>
+
+            <div class="bg-[#161B22] p-8 rounded-xl shadow-2xl border border-teal-600/30">
+                <h2 class="text-3xl font-bold text-teal-300 mb-6">Danh sách người dùng</h2>
+                <div class="mb-4 text-gray-300 text-xl font-semibold">Tổng số người dùng: <span id="totalUsersCount"
+                        class="text-teal-400">0</span></div>
+                <div id="loadingIndicator" class="text-teal-400 text-center text-lg hidden">Đang tải danh sách người
+                    dùng...</div>
+                <div id="errorMessage" class="text-red-500 text-center text-lg hidden mb-4"></div>
+                <div id="noUsersMessage" class="text-gray-400 text-center text-lg hidden mb-4">Chưa có người dùng nào
+                    trong hệ thống.</div>
+
+                <div
+                    class="table-container overflow-x-auto rounded-lg border border-gray-700 shadow-inner shadow-gray-900/50">
+                    <table class="min-w-full divide-y divide-gray-700">
+                        <thead class="bg-[#0D1117]">
+                            <tr>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                    Tài khoản</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                    Tên</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                    Quyền</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                    Số dư</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                    Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody" class="bg-[#1A212B] divide-y divide-gray-700">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="sidebar"
+        class="fixed top-0 right-0 h-full w-64 bg-[#161B22] shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out z-[1002]">
+        <div class="p-6">
+            <h3 class="text-xl font-bold text-teal-400 mb-6 border-b border-teal-700/50 pb-3">Menu</h3>
+            <nav>
+                <ul>
+                    <li class="mb-4">
+                        <a href="http://127.0.0.1:5500/FE/dashboard.html"
+                            class="flex items-center text-gray-200 hover:text-teal-400 text-lg font-semibold transition-colors duration-200">
+                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m0 0l-7 7m7-7v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                                </path>
+                            </svg>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="http://127.0.0.1:5500/FE/manage-links.html"
+                            class="flex items-center text-gray-200 hover:text-teal-400 text-lg font-semibold transition-colors duration-200">
+                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2">
+                                </path>
+                            </svg>
+                            Quản lý liên kết
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="http://127.0.0.1:5500/FE/my-account.html"
+                            class="flex items-center text-gray-200 hover:text-teal-400 text-lg font-semibold transition-colors duration-200">
+                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                            Tài khoản của tôi
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="http://127.0.0.1:5500/FE/my-account.html" id="walletLink"
+                            class="flex items-center text-gray-200 hover:text-teal-400 text-lg font-semibold transition-colors duration-200">
+                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z">
+                                </path>
+                            </svg>
+                            Ví tiền: <span id="balanceAmount">0.00</span>
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a href="#"
+                            class="flex items-center text-gray-200 hover:text-teal-400 text-lg font-semibold transition-colors duration-200">
+                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.568.356 1.153-.133 1.065-2.572z">
+                                </path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            Cài đặt
+                        </a>
+                    </li>
+                    <div id="adminMenuSection">
+                        <li class="mb-4 border-t border-teal-700/50 pt-4 mt-4">
+                            <h4 class="text-gray-400 text-sm font-semibold uppercase mb-2">Admin</h4>
+                            <a href="http://127.0.0.1:5500/FE/manager-users.html"
+                                class="flex items-center text-gray-200 hover:text-teal-400 text-lg font-semibold transition-colors duration-200">
+                                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M17 20h2a2 2 0 002-2V7.5L14.5 4H9a2 2 0 00-2 2v12a2 2 0 002 2h5M7 12h5m-5 4h5M9 4h6v6h-6V4z">
+                                    </path>
+                                </svg>
+                                Quản lý người dùng
+                            </a>
+                        </li>
+                    </div>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-[1001] hidden"></div>
+
+    <div id="userDetailsModal" class="modal">
+        <div class="modal-content text-gray-200">
+            <span class="close-button" id="closeModalBtn">&times;</span>
+            <h3 class="text-2xl font-bold text-teal-400 mb-6 border-b border-teal-700/50 pb-3">Chi tiết người dùng</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-lg">
+                <p><strong>ID:</strong> <span id="detailId"></span></p>
+                <p><strong>Tài khoản:</strong> <span id="detailAccount"></span></p>
+                <p><strong>Tên:</strong> <span id="detailName"></span></p>
+                <p><strong>Email:</strong> <span id="detailEmail"></span></p>
+                <p><strong>Số dư:</strong> <span id="detailBalance"></span></p>
+                <p><strong>Quyền:</strong> <span id="detailRole"></span></p>
+                <p><strong>Ngày tạo:</strong> <span id="detailCreateAt"></span></p>
+                <p><strong>Cập nhật cuối:</strong> <span id="detailUpdateAt"></span></p>
+                <p><strong>Tên ngân hàng:</strong> <span id="detailBankName"></span></p>
+                <p><strong>Địa chỉ ngân hàng:</strong> <span id="detailBankAddress"></span></p>
+            </div>
+            <div class="mt-6 flex justify-end">
+                <button id="deleteUserBtn"
+                    class="bg-red-600 text-white px-5 py-2 rounded-lg hover:bg-red-700 transition-colors duration-200">Xóa
+                    người dùng</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <h3 class="text-2xl font-bold text-teal-400 mb-4">Xác nhận xóa người dùng</h3>
+            <p>Bạn có chắc chắn muốn xóa tài khoản <strong id="confirmUserAccount"></strong> (ID: <strong
+                    id="confirmUserId"></strong>)? Hành động này không thể hoàn tác.</p>
+            <p id="confirmationErrorMessage" class="text-red-500 hidden"></p>
+            <div class="button-group">
+                <button id="confirmDeleteBtn">Xóa</button>
+                <button id="cancelDeleteBtn">Hủy</button>
+            </div>
+        </div>
+    </div>
+
+    <footer
+        class="bg-[#161B22] py-8 sm:py-10 text-center text-gray-400 text-sm sm:text-base border-t border-teal-600/10 shadow-inner shadow-gray-900/50">
+        <div class="container mx-auto px-4 sm:px-5">
+            <p>&copy; <span id="year"></span> Cluq. Mọi quyền được bảo lưu.</p>
+            <script>
+                document.getElementById("year").textContent = new Date().getFullYear();
+            </script>
+            <br>
+            <p>Develope by <a href="https://github.com/shyhubb">Shyhub</a> </p>
+        </div>
+    </footer>
+
+    <script>
+        const API_VERSION_V1 = "/v1";
+        const PUBLIC_SHORT_LINK_API_V1_PATH = API_VERSION_V1 + "/public/shortlink";
+        const PRIVATE_SHORT_LINK_API_V1_PATH = API_VERSION_V1 + "/user/link";
+        const AUTH_API_V1_PATH = API_VERSION_V1 + "/auth";
+        const USER_API_V1_PATH = API_VERSION_V1 + "/user";
+        const ADMIN_API_V1_PATH = API_VERSION_V1 + "/admin";
+        const BASE_SHORT_URL_DOMAIN = "http://localhost:8080"; // Updated
+        const WEB_CONSTANTS_BASE_SUCCESS = "Thành công.";
+        const WEB_CONSTANTS_DONT_HAVE_USER_IN_SYSTEM = "Chưa có người dùng nào trong hệ thống.";
+        const WEB_CONSTANTS_ROLE_ADMIN = "ADMIN";
+        const WEB_CONSTANTS_ROLE_USER = "USER";
+        // New constant for the specific error message
+        const ERROR_DELETE_THIS_ADMIN = "Không thể xóa tài khoản của bạn.";
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('jwtToken');
+            if (!token) {
+                window.location.href = 'http://127.0.0.1:5500/FE/login.html'; // Updated URL
+                return;
+            }
+
+            const logoutButton = document.getElementById('logoutButton');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const adminMenuSection = document.getElementById('adminMenuSection');
+            const balanceAmountSpan = document.getElementById('balanceAmount');
+
+            const totalUsersCountSpan = document.getElementById('totalUsersCount');
+            const usersTableBody = document.getElementById('usersTableBody');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const errorMessageDiv = document.getElementById('errorMessage');
+            const noUsersMessageDiv = document.getElementById('noUsersMessage');
+
+            // User Details Modal Elements
+            const userDetailsModal = document.getElementById('userDetailsModal');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const detailId = document.getElementById('detailId');
+            const detailAccount = document.getElementById('detailAccount');
+            const detailName = document.getElementById('detailName');
+            const detailEmail = document.getElementById('detailEmail');
+            const detailBalance = document.getElementById('detailBalance');
+            const detailRole = document.getElementById('detailRole');
+            const detailCreateAt = document.getElementById('detailCreateAt');
+            const detailUpdateAt = document.getElementById('detailUpdateAt');
+            const detailBankName = document.getElementById('detailBankName');
+            const detailBankAddress = document.getElementById('detailBankAddress');
+            const deleteUserBtn = document.getElementById('deleteUserBtn');
+
+            // Confirmation Modal Elements
+            const confirmationModal = document.getElementById('confirmationModal');
+            const confirmUserAccount = document.getElementById('confirmUserAccount');
+            const confirmUserId = document.getElementById('confirmUserId');
+            const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+            const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+            const confirmationErrorMessage = document.getElementById('confirmationErrorMessage');
+
+            let allUsersData = [];
+            let currentUserForDetails = null; // To store the user object currently displayed in modal
+
+            // Sidebar Toggles
+            sidebarToggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('translate-x-full');
+                sidebarOverlay.classList.toggle('hidden');
+            });
+
+            sidebarOverlay.addEventListener('click', () => {
+                sidebar.classList.add('translate-x-full');
+                sidebarOverlay.classList.add('hidden');
+            });
+
+            // Logout functionality
+            logoutButton.addEventListener('click', () => {
+                localStorage.removeItem('jwtToken');
+                window.location.href = 'http://127.0.0.1:5500/FE/login.html'; // Updated URL
+            });
+
+            // Modal close button for User Details Modal
+            closeModalBtn.addEventListener('click', () => {
+                userDetailsModal.style.display = 'none';
+            });
+
+            // Close modal when clicking outside
+            window.addEventListener('click', (event) => {
+                if (event.target === userDetailsModal) {
+                    userDetailsModal.style.display = 'none';
+                }
+                if (event.target === confirmationModal) {
+                    confirmationModal.style.display = 'none';
+                    confirmationErrorMessage.classList.add('hidden'); // Hide error on close
+                }
+            });
+
+            // Close button for Confirmation Modal (if added, though usually a 'Cancel' button is used)
+            // No explicit close button in the HTML for confirmation modal, but we can add one if needed.
+            // For now, clicking overlay or Cancel button closes it.
+            cancelDeleteBtn.addEventListener('click', () => {
+                confirmationModal.style.display = 'none';
+                confirmationErrorMessage.classList.add('hidden'); // Hide error on close
+            });
+
+
+            // Function to display messages
+            function displayMessage(element, message, isError) {
+                element.textContent = message;
+                element.classList.remove('hidden', 'text-green-500', 'text-red-500', 'text-gray-400');
+                if (isError) {
+                    element.classList.add('text-red-500');
+                } else if (message === WEB_CONSTANTS_DONT_HAVE_USER_IN_SYSTEM) {
+                    element.classList.add('text-gray-400');
+                } else {
+                    element.classList.add('text-green-500');
+                }
+            }
+
+            // Function to format date-time strings from API
+            function formatDateTime(dateTimeString) {
+                if (!dateTimeString) return 'N/A';
+                try {
+                    const date = new Date(dateTimeString);
+                    return date.toLocaleString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        hour12: false
+                    });
+                } catch (e) {
+                    console.error("Error formatting date:", dateTimeString, e);
+                    return dateTimeString;
+                }
+            }
+
+            // Function to fetch and display users
+            async function fetchUsers() {
+                loadingIndicator.classList.remove('hidden');
+                errorMessageDiv.classList.add('hidden');
+                noUsersMessageDiv.classList.add('hidden');
+                usersTableBody.innerHTML = '';
+                totalUsersCountSpan.textContent = '0';
+
+                try {
+                    const apiUrl = BASE_SHORT_URL_DOMAIN + ADMIN_API_V1_PATH + '/user/manager';
+                    const response = await fetch(apiUrl, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                    });
+
+                    const data = await response.json();
+                    console.log('Manager Users API Response Status:', response.status);
+                    console.log('Manager Users API Response Message:', data.message);
+
+                    if (response.ok && data.message === WEB_CONSTANTS_BASE_SUCCESS && data.data) {
+                        const managerUserResponse = data.data;
+                        allUsersData = managerUserResponse.users || [];
+
+                        totalUsersCountSpan.textContent = managerUserResponse.count;
+
+                        if (allUsersData.length === 0) {
+                            displayMessage(noUsersMessageDiv, WEB_CONSTANTS_DONT_HAVE_USER_IN_SYSTEM, false);
+                        } else {
+                            allUsersData.forEach(user => {
+                                const row = usersTableBody.insertRow();
+                                row.classList.add('hover:bg-[#28313D]', 'transition-colors', 'duration-200', 'cursor-pointer');
+                                row.dataset.account = user.account;
+                                row.dataset.userId = user.id;
+
+                                row.innerHTML = `
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">${user.account || 'N/A'}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">${user.name || 'N/A'}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">${user.role || 'N/A'}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-teal-400">${parseFloat(user.balance || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 })
+                                    }</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <button class="show-details-btn bg-teal-600 text-white px-3 py-1 rounded hover:bg-teal-700 transition-colors duration-200">
+                                            Chi tiết
+                                        </button>
+                                    </td>
+                                `;
+                            });
+
+                            usersTableBody.querySelectorAll('.show-details-btn').forEach(button => {
+                                button.addEventListener('click', (event) => {
+                                    const account = event.target.closest('tr').dataset.account;
+                                    const user = allUsersData.find(u => u.account === account);
+                                    if (user) {
+                                        showUserDetails(user);
+                                    }
+                                });
+                            });
+                        }
+                    } else {
+                        let msg = data.message || 'Đã xảy ra lỗi không xác định khi tải danh sách người dùng.';
+                        if (response.status === 401 || response.status === 403) {
+                            msg = 'Bạn không có quyền truy cập trang này hoặc phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại với tài khoản Admin.';
+                            localStorage.removeItem('jwtToken');
+                            setTimeout(() => { window.location.href = 'http://127.0.0.1:5500/FE/login.html'; }, 3000); // Updated URL
+                        } else if (data.message === WEB_CONSTANTS_DONT_HAVE_USER_IN_SYSTEM) {
+                            displayMessage(noUsersMessageDiv, WEB_CONSTANTS_DONT_HAVE_USER_IN_SYSTEM, false);
+                            return;
+                        }
+                        displayMessage(errorMessageDiv, msg, true);
+                    }
+                } catch (error) {
+                    console.error('Lỗi fetch users:', error);
+                    displayMessage(errorMessageDiv, 'Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng.', true);
+                } finally {
+                    loadingIndicator.classList.add('hidden');
+                }
+            }
+
+            // Function to show user details in the modal
+            function showUserDetails(user) {
+                currentUserForDetails = user; // Set the current user for potential deletion
+                detailId.textContent = user.id || 'N/A';
+                detailAccount.textContent = user.account || 'N/A';
+                detailName.textContent = user.name || 'N/A';
+                detailEmail.textContent = user.email || 'N/A';
+                detailBalance.textContent = parseFloat(user.balance || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 });
+                detailRole.textContent = user.role || 'N/A';
+                detailCreateAt.textContent = formatDateTime(user.createAt);
+                detailUpdateAt.textContent = formatDateTime(user.updateAt);
+                detailBankName.textContent = user.bankName || 'N/A';
+                detailBankAddress.textContent = user.bankAdress || 'N/A';
+
+                userDetailsModal.style.display = 'flex';
+            }
+
+            // Show confirmation modal before deletion
+            deleteUserBtn.addEventListener('click', () => {
+                if (!currentUserForDetails || !currentUserForDetails.id) {
+                    alert('Không tìm thấy thông tin người dùng để xóa.'); // Fallback alert
+                    return;
+                }
+                userDetailsModal.style.display = 'none'; // Hide user details modal
+                confirmUserAccount.textContent = currentUserForDetails.account;
+                confirmUserId.textContent = currentUserForDetails.id;
+                confirmationErrorMessage.classList.add('hidden'); // Clear previous errors
+                confirmationModal.style.display = 'flex'; // Show confirmation modal
+            });
+
+            // Function to handle user deletion
+            confirmDeleteBtn.addEventListener('click', async () => {
+                if (!currentUserForDetails || !currentUserForDetails.id) {
+                    displayMessage(confirmationErrorMessage, 'Lỗi: Không tìm thấy thông tin người dùng.', true);
+                    return;
+                }
+
+                try {
+                    const apiUrl = `${BASE_SHORT_URL_DOMAIN}${ADMIN_API_V1_PATH}/user/delete/${currentUserForDetails.id}`;
+                    const response = await fetch(apiUrl, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok && data.message === WEB_CONSTANTS_BASE_SUCCESS) {
+                        alert('Xóa người dùng thành công!'); // Use browser alert for final confirmation
+                        confirmationModal.style.display = 'none'; // Close confirmation modal
+                        fetchUsers(); // Refresh the user list
+                    } else {
+                        let msg = data.message || 'Đã xảy ra lỗi không xác định khi xóa người dùng.';
+                        if (data.message === ERROR_DELETE_THIS_ADMIN) {
+                            displayMessage(confirmationErrorMessage, ERROR_DELETE_THIS_ADMIN, true);
+                        } else {
+                            displayMessage(confirmationErrorMessage, `Lỗi xóa: ${msg}`, true);
+                        }
+                    }
+                } catch (error) {
+                    console.error('Lỗi delete user:', error);
+                    displayMessage(confirmationErrorMessage, 'Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng.', true);
+                }
+            });
+
+            // Function to update sidebar balance and check admin role
+            async function updateSidebarBalance() {
+                try {
+                    const apiUrl = BASE_SHORT_URL_DOMAIN + USER_API_V1_PATH + '/getprofile';
+                    const response = await fetch(apiUrl, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                    });
+
+                    const data = await response.json();
+                    if (response.ok && data.message === WEB_CONSTANTS_BASE_SUCCESS && data.data) {
+                        if (balanceAmountSpan && data.data.balance !== undefined && data.data.balance !== null) {
+                            balanceAmountSpan.textContent = parseFloat(data.data.balance).toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 });
+                        }
+                        if (data.data.role === WEB_CONSTANTS_ROLE_ADMIN) {
+                            adminMenuSection.classList.remove('hidden');
+                        } else {
+                            adminMenuSection.classList.add('hidden');
+                            if (window.location.pathname.includes('manager-user.html')) {
+                                alert('Bạn không có quyền truy cập trang quản lý người dùng. Vui lòng đăng nhập với tài khoản Admin.');
+                                window.location.href = 'http://127.0.0.1:5500/FE/dashboard.html'; // Updated URL
+                            }
+                        }
+                    } else {
+                        if (balanceAmountSpan) balanceAmountSpan.textContent = 'N/A';
+                        adminMenuSection.classList.add('hidden');
+                        if (response.status === 401 || response.status === 403) {
+                            localStorage.removeItem('jwtToken');
+                            setTimeout(() => { window.location.href = 'http://127.0.0.1:5500/FE/login.html'; }, 2000); // Updated URL
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error updating sidebar balance/role:', error);
+                    if (balanceAmountSpan) balanceAmountSpan.textContent = 'Lỗi';
+                    adminMenuSection.classList.add('hidden');
+                }
+            }
+
+
+            // Initial load: Check admin role and fetch users
+            await updateSidebarBalance();
+            fetchUsers();
+        });
+    </script>
+</body>
+
+</html>

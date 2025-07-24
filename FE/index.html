@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cluq - Rút gọn liên kết của bạn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom CSS for animations and specific properties not in Tailwind */
+        body {
+            background-image: radial-gradient(circle at top left, rgba(0, 188, 212, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at bottom right, rgba(0, 188, 212, 0.1) 0%, transparent 40%);
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            animation: backgroundShift 20s infinite alternate;
+        }
+
+        @keyframes backgroundShift {
+            0% {
+                background-position: 0% 0%, 100% 100%;
+            }
+
+            100% {
+                background-position: 100% 100%, 0% 0%;
+            }
+        }
+
+        .backdrop-blur-md {
+            /* Custom class for glassmorphism */
+            backdrop-filter: blur(8px);
+            /* Reduced blur for performance */
+            -webkit-backdrop-filter: blur(8px);
+            /* For Safari compatibility */
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(0, 188, 212, 0.05) 0%, transparent 70%);
+            animation: rotateBackground 30s infinite linear;
+            z-index: 0;
+            will-change: transform;
+        }
+
+        @keyframes rotateBackground {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .animate-fadeInScale {
+            animation: fadeInScale 1.5s ease-out forwards;
+            opacity: 0;
+            will-change: transform, opacity;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .animate-fadeIn {
+            animation: fadeIn 2s ease-out 0.5s forwards;
+            opacity: 0;
+            will-change: transform, opacity;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-bounceIn {
+            animation: bounceIn 1s ease-out 1s forwards;
+            opacity: 0;
+            will-change: transform, opacity;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+
+            70% {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .shine-effect::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: all 0.4s ease-out;
+            will-change: transform;
+        }
+
+        .shine-effect:hover::before {
+            left: 100%;
+        }
+
+        .form-gradient-border::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            background: linear-gradient(45deg, rgba(0, 188, 212, 0.05), rgba(0, 188, 212, 0.01));
+            filter: blur(8px);
+            -webkit-filter: blur(8px);
+            z-index: 0;
+            border-radius: 12px;
+            will-change: filter;
+        }
+
+        .animate-slideInUp {
+            animation: slideInUp 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+            will-change: transform, opacity;
+        }
+
+        @keyframes slideInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 188, 212, 0.05) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .animate-pop-in {
+            animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            opacity: 0;
+            transform: scale(0.8);
+            will-change: transform, opacity;
+        }
+
+        @keyframes popIn {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Custom CSS for tables for consistency */
+        .cpm-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            color: #C9D1D9;
+            /* Text color for table content */
+        }
+
+        .cpm-table th,
+        .cpm-table td {
+            border: 1px solid #2F4F4F;
+            /* Darker border for table cells */
+            padding: 12px;
+            /* More padding for better readability */
+            text-align: left;
+        }
+
+        .cpm-table th {
+            background-color: #1A212B;
+            /* Darker header background */
+            font-weight: 600;
+
+            /* Header text color */
+        }
+
+        .cpm-table tbody tr:nth-child(odd) {
+            background-color: #161B22;
+            /* Lighter background for odd rows */
+        }
+
+        .cpm-table tbody tr:nth-child(even) {
+            background-color: #0D1117;
+            /* Darker background for even rows */
+        }
+
+
+        /* Responsive Optimization for Mobile Performance */
+        @media (max-width: 767px) {
+            body {
+                animation: none;
+                /* Disable backgroundShift on mobile */
+                background-image: none;
+                /* Remove radial gradients for body */
+            }
+
+            .hero::before {
+                animation: none;
+                /* Disable rotateBackground on mobile */
+                background: none;
+                /* Remove radial gradient for hero */
+            }
+
+            .form-gradient-border::before {
+                filter: none;
+                /* Disable blur for form border on mobile */
+                -webkit-filter: none;
+                background: none;
+                /* Remove gradient for form border */
+            }
+
+            /* Adjust font sizes and padding for better mobile readability and less clutter */
+            .hero h1 {
+                font-size: 3.5rem;
+                /* Smaller on mobile */
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+                /* Smaller on mobile */
+            }
+
+            .shorten-link h2,
+            .features h2,
+            .mission h2,
+            .achievements h2 {
+                font-size: 2.5rem;
+                /* Smaller on mobile */
+            }
+
+            .shorten-form input,
+            .shorten-form button {
+                font-size: 1rem;
+                /* Smaller input/button text */
+                padding: 12px 20px;
+                /* Smaller padding */
+            }
+
+            .result-area {
+                font-size: 1rem;
+                /* Smaller result text */
+                padding: 15px;
+                /* Smaller padding */
+            }
+
+            .feature-card h3 {
+                font-size: 1.8rem;
+            }
+
+            .feature-card p {
+                font-size: 0.95rem;
+            }
+
+            .achievement-card p:first-child {
+                /* Numbers in achievements */
+                font-size: 4rem;
+            }
+
+            .table-container {
+                overflow-x: auto;
+                /* Allows horizontal scrolling for table */
+                -webkit-overflow-scrolling: touch;
+                /* Smooth scrolling on iOS */
+            }
+
+            table {
+                min-width: 600px;
+                /* Ensure table content is not too cramped */
+            }
+        }
+    </style>
+</head>
+
+<body class="font-inter antialiased bg-[#0D1117] text-[#C9D1D9] leading-relaxed overflow-x-hidden">
+    <header
+        class="bg-[#161B22] bg-opacity-80 backdrop-blur-md py-3 shadow-2xl flex justify-between items-center sticky top-0 z-50 border-b border-teal-600/20">
+        <div class="container mx-auto px-4 sm:px-6 flex justify-between items-center w-full">
+            <a href="http://127.0.0.1:5500/FE/index.html" class="text-4xl sm:text-5xl font-extrabold text-teal-400 no-underline inline-block transition-all duration-300 ease-in-out ml-2 sm:ml-4
+                      hover:text-teal-300 drop-shadow-lg hover:drop-shadow-xl">
+                Cluq
+            </a>
+            <nav class="mr-2 sm:mr-4">
+                <a href="http://127.0.0.1:5500/FE/login.html" class="text-sm sm:text-base text-gray-100 no-underline font-semibold ml-4 sm:ml-6 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl transition-all duration-300 ease-in-out relative overflow-hidden shine-effect
+                          hover:text-teal-300 hover:translate-y-[-2px]">
+                    Đăng nhập
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section
+            class="hero text-center py-24 sm:py-32 px-4 bg-gradient-to-br from-[#0D1117]/70 to-[#161B22]/70 border-b border-teal-600/20 relative overflow-hidden">
+            <div class="container mx-auto relative z-10">
+                <h1
+                    class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl mb-4 sm:mb-6 text-teal-300 leading-tight font-extrabold drop-shadow-xl animate-fadeInScale">
+                    Rút gọn liên kết dài của bạn. <br class="hidden sm:block"> Đơn giản hóa việc chia sẻ.
+                </h1>
+                <p
+                    class="text-lg sm:text-xl md:text-2xl text-gray-400 max-w-2xl sm:max-w-3xl lg:max-w-4xl mx-auto mb-10 sm:mb-12 animate-fadeIn">
+                    Biến các URL dài thành các liên kết ngắn gọn, có thể theo dõi và dễ nhớ. Hoàn hảo cho mạng xã hội,
+                    email và thuyết trình.
+                </p>
+                <button onclick="document.getElementById('shorten-section').scrollIntoView({ behavior: 'smooth' });"
+                    class="bg-teal-500 text-gray-900 px-8 py-4 sm:px-10 sm:py-5 text-lg sm:text-xl font-bold rounded-xl cursor-pointer transition-all duration-300 ease-in-out shadow-lg shadow-teal-500/40 relative overflow-hidden shine-effect animate-bounceIn
+                               hover:bg-teal-400 hover:translate-y-[-5px] hover:shadow-xl hover:shadow-teal-500/60">
+                    Bắt đầu ngay
+                </button>
+            </div>
+        </section>
+
+        <section
+            class="shorten-link py-16 sm:py-20 px-4 text-center bg-[#161B22] border-b border-teal-600/20 relative overflow-hidden"
+            id="shorten-section">
+            <div class="container mx-auto">
+                <h2 class="text-4xl sm:text-5xl font-extrabold mb-10 sm:mb-12 text-teal-400 drop-shadow-md">Rút gọn URL
+                    của bạn</h2>
+                <form id="shortenForm"
+                    class="shorten-form flex flex-col items-center gap-5 sm:gap-6 max-w-xl sm:max-w-3xl mx-auto bg-[#0D1117] p-8 sm:p-12 rounded-xl shadow-2xl border border-teal-600/30 relative overflow-hidden form-gradient-border">
+                    <input type="url" id="originalLinkInput" placeholder="Link cần rút gọn." required
+                        class="w-full p-4 sm:p-5 border-2 border-teal-500 rounded-xl bg-[#161B22] text-gray-100 text-lg sm:text-xl transition-all duration-300 ease-in-out shadow-inner shadow-gray-900/50
+                                  placeholder:text-gray-500 placeholder:opacity-70 focus:outline-none focus:border-teal-400 focus:shadow-lg focus:shadow-teal-500/40 focus:bg-[#1A212B] cursor-text z-10">
+                    <button type="submit" id="shortenButton"
+                        class="bg-teal-500 text-gray-900 px-8 py-4 sm:px-10 sm:py-5 text-lg sm:text-xl font-bold rounded-xl cursor-pointer transition-all duration-300 ease-in-out w-full shadow-lg shadow-teal-500/40 relative overflow-hidden shine-effect
+                                   hover:bg-teal-400 hover:translate-y-[-3px] hover:shadow-xl hover:shadow-teal-500/60">
+                        Rút gọn URL
+                    </button>
+                </form>
+                <div id="resultArea"
+                    class="result-area mt-8 sm:mt-10 p-6 sm:p-8 bg-[#161B22] rounded-xl border border-teal-600/30 text-gray-100 text-lg sm:text-xl break-words text-left mx-auto max-w-xl sm:max-w-3xl shadow-2xl opacity-0 translate-y-5 hidden">
+                    <p class="mb-3 sm:mb-4 text-gray-400 font-semibold">URL rút gọn của bạn:</p>
+                    <a id="shortLinkOutput" href="#" target="_blank"
+                        class="text-teal-400 no-underline font-bold transition-colors duration-300 block mb-3 sm:mb-4 hover:text-teal-300 hover:underline"></a>
+                    <button id="copyButton" class="bg-teal-500 text-gray-900 px-5 py-2.5 sm:px-6 sm:py-3 text-base sm:text-lg font-semibold rounded-lg cursor-pointer transition-all duration-300 shadow-md shadow-teal-500/30
+                                                 hover:bg-teal-400 hover:translate-y-[-2px]">
+                        Sao chép liên kết
+                    </button>
+                </div>
+                <div id="errorMessage"
+                    class="error-message text-red-500 mt-4 sm:mt-5 font-semibold text-base sm:text-lg hidden animate-fadeIn">
+                </div>
+            </div>
+        </section>
+
+        <section class="py-16 sm:py-20 px-4 text-center bg-[#0D1117] relative overflow-hidden">
+            <div class="container mx-auto max-w-6xl">
+                <h2 class="text-4xl sm:text-5xl font-extrabold text-teal-400 mb-6 drop-shadow-md">Bảng giá CPM ($ / 1000
+                    lượt click)</h2>
+                <div class="bg-[#161B22] p-8 rounded-xl shadow-2xl border border-teal-600/30 mt-12">
+                    <div id="cpm-rates-loading" class="text-center text-gray-500 mb-4">Đang tải bảng giá CPM...</div>
+                    <div id="cpm-rates-error" class="text-red-500 text-center mb-4 hidden">Không thể tải bảng giá CPM.
+                        Vui lòng thử lại sau.</div>
+                    <div class="table-container">
+                        <table id="cpm-rates-table" class="cpm-table hidden">
+                            <thead>
+                                <tr>
+                                    <th>Quốc gia</th>
+                                    <th>CPM ($)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="features py-20 sm:py-24 px-4 text-center bg-[#0D1117] relative overflow-hidden">
+            <div class="container mx-auto relative z-10">
+                <h2 class="text-5xl sm:text-6xl font-extrabold mb-16 sm:mb-20 text-teal-300 drop-shadow-xl">Tại sao chọn
+                    Cluq?</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 justify-center">
+                    <div
+                        class="feature-card bg-[#161B22] p-8 sm:p-10 rounded-xl shadow-2xl transition-all duration-400 ease-in-out border border-teal-600/20 flex flex-col items-center text-center relative overflow-hidden
+                                hover:translate-y-[-10px] hover:shadow-3xl hover:shadow-gray-900/80 hover:border-teal-500 group">
+                        <img src="https://placehold.co/100x100/00BCD4/0D1117?text=Tốc+độ" alt="Biểu tượng tốc độ" class="max-w-[100px] h-auto mb-5 sm:mb-6 rounded-full border-4 border-teal-500 shadow-xl shadow-teal-500/70 transition-all duration-400 ease-in-out
+                                    group-hover:scale-105 group-hover:shadow-2xl group-hover:shadow-teal-400">
+                        <h3 class="text-2xl sm:text-3xl text-teal-300 mb-4 sm:mb-5 font-extrabold drop-shadow-md">Nhanh
+                            & Dễ dàng</h3>
+                        <p class="text-gray-400 text-base sm:text-lg leading-relaxed max-w-[95%]">
+                            Tạo liên kết rút gọn trong vài giây với giao diện đơn giản, trực quan. Không yêu cầu đăng
+                            ký.
+                        </p>
+                    </div>
+                    <div
+                        class="feature-card bg-[#161B22] p-8 sm:p-10 rounded-xl shadow-2xl transition-all duration-400 ease-in-out border border-teal-600/20 flex flex-col items-center text-center relative overflow-hidden
+                                hover:translate-y-[-10px] hover:shadow-3xl hover:shadow-gray-900/80 hover:border-teal-500 group">
+                        <img src="https://placehold.co/100x100/00BCD4/0D1117?text=Tin+cậy" alt="Biểu tượng đáng tin cậy"
+                            class="max-w-[100px] h-auto mb-5 sm:mb-6 rounded-full border-4 border-teal-500 shadow-xl shadow-teal-500/70 transition-all duration-400 ease-in-out
+                                    group-hover:scale-105 group-hover:shadow-2xl group-hover:shadow-teal-400">
+                        <h3 class="text-2xl sm:text-3xl text-teal-300 mb-4 sm:mb-5 font-extrabold drop-shadow-md">Dịch
+                            vụ đáng tin cậy</h3>
+                        <p class="text-gray-400 text-base sm:text-lg leading-relaxed max-w-[95%]">
+                            Hệ thống mạnh mẽ của chúng tôi đảm bảo các liên kết rút gọn của bạn luôn chuyển hướng nhanh
+                            chóng và đáng tin cậy.
+                        </p>
+                    </div>
+                    <div
+                        class="feature-card bg-[#161B22] p-8 sm:p-10 rounded-xl shadow-2xl transition-all duration-400 ease-in-out border border-teal-600/20 flex flex-col items-center text-center relative overflow-hidden
+                                hover:translate-y-[-10px] hover:shadow-3xl hover:shadow-gray-900/80 hover:border-teal-500 group">
+                        <img src="https://placehold.co/100x100/00BCD4/0D1117?text=Gọn+gàng" alt="Biểu tượng gọn gàng"
+                            class="max-w-[100px] h-auto mb-5 sm:mb-6 rounded-full border-4 border-teal-500 shadow-xl shadow-teal-500/70 transition-all duration-400 ease-in-out
+                                    group-hover:scale-105 group-hover:shadow-2xl group-hover:shadow-teal-400">
+                        <h3 class="text-2xl sm:text-3xl text-teal-300 mb-4 sm:mb-5 font-extrabold drop-shadow-md">Gọn
+                            gàng & Súc tích</h3>
+                        <p class="text-gray-400 text-base sm:text-lg leading-relaxed max-w-[95%]">
+                            Nói lời tạm biệt với các URL dài, lộn xộn. Chia sẻ các liên kết thanh lịch và chuyên nghiệp
+                            một cách dễ dàng.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section
+            class="mission py-20 sm:py-24 px-4 text-center bg-[#161B22] border-b border-teal-600/20 relative overflow-hidden">
+            <div class="container mx-auto">
+                <h2 class="text-4xl sm:text-5xl font-extrabold mb-10 sm:mb-12 text-teal-400 drop-shadow-md">Sứ mệnh của
+                    chúng tôi</h2>
+                <div
+                    class="max-w-2xl sm:max-w-4xl mx-auto bg-[#0D1117] p-8 sm:p-12 rounded-xl shadow-2xl border border-teal-600/30 animate-pop-in">
+                    <p class="text-base sm:text-lg text-gray-300 leading-relaxed mb-4 sm:mb-6">
+                        Tại Cluq, sứ mệnh của chúng tôi là đơn giản hóa thế giới trực tuyến bằng cách cung cấp một
+                        giải pháp rút gọn URL mạnh mẽ, đáng tin cậy và dễ sử dụng. Chúng tôi tin rằng việc chia sẻ liên
+                        kết nên nhanh chóng, hiệu quả và không gây phiền toái.
+                    </p>
+                    <p class="text-base sm:text-lg text-gray-300 leading-relaxed">
+                        Chúng tôi cam kết xây dựng một nền tảng không chỉ giúp bạn tiết kiệm không gian mà còn nâng cao
+                        trải nghiệm chia sẻ của bạn, giúp bạn kết nối với khán giả một cách hiệu quả hơn.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="achievements py-20 sm:py-24 px-4 text-center bg-[#0D1117] relative overflow-hidden">
+            <div class="container mx-auto">
+                <h2 class="text-4xl sm:text-5xl font-extrabold mb-10 sm:mb-12 text-teal-400 drop-shadow-md">Thành tựu
+                    của chúng tôi</h2>
+                <div
+                    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 sm:gap-10 max-w-xl sm:max-w-5xl mx-auto">
+                    <div class="achievement-card bg-[#161B22] p-8 sm:p-10 rounded-xl shadow-2xl border border-teal-600/20 transition-transform duration-300 hover:translate-y-[-5px] animate-pop-in"
+                        style="animation-delay: 0.1s;">
+                        <p class="text-5xl sm:text-6xl font-extrabold text-teal-300 mb-3 sm:mb-4">1M+</p>
+                        <p class="text-lg sm:text-xl text-gray-300">Liên kết được rút gọn</p>
+                    </div>
+                    <div class="achievement-card bg-[#161B22] p-8 sm:p-10 rounded-xl shadow-2xl border border-teal-600/20 transition-transform duration-300 hover:translate-y-[-5px] animate-pop-in"
+                        style="animation-delay: 0.2s;">
+                        <p class="text-5xl sm:text-6xl font-extrabold text-teal-300 mb-3 sm:mb-4">500K+</p>
+                        <p class="text-lg sm:text-xl text-gray-300">Lượt truy cập hàng ngày</p>
+                    </div>
+                    <div class="achievement-card bg-[#161B22] p-8 sm:p-10 rounded-xl shadow-2xl border border-teal-600/20 transition-transform duration-300 hover:translate-y-[-5px] animate-pop-in"
+                        style="animation-delay: 0.3s;">
+                        <p class="text-5xl sm:text-6xl font-extrabold text-teal-300 mb-3 sm:mb-4">99.9%</p>
+                        <p class="text-lg sm:text-xl text-gray-300">Thời gian hoạt động</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer
+        class="bg-[#161B22] py-8 sm:py-10 text-center text-gray-400 text-sm sm:text-base border-t border-teal-600/10 shadow-inner shadow-gray-900/50">
+        <div class="container mx-auto px-4 sm:px-5">
+            <p>&copy; <span id="year"></span> Cluq. Mọi quyền được bảo lưu.</p>
+            <script>
+                document.getElementById("year").textContent = new Date().getFullYear();
+            </script>
+            <p>Develope by <a href="https://github.com/shyhubb">Shyhub</a> </p>
+        </div>
+    </footer>
+
+    <script>
+        // Constants from WebConstants.java
+        const PUBLIC_SHORT_LINK_API_V1_PATH = '/v1/public/shortlink';
+        const BASE_SHORT_URL_DOMAIN = 'http://localhost:8080'; // Updated backend URL
+        const WEB_CONSTANTS_BASE_SUCCESS = 'Thành công.';
+        const WEB_CONSTANTS_CREATE_LINK_LIMIT = 'Bạn đã đạt giới hạn tạo Shortlink.';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const shortenForm = document.getElementById('shortenForm');
+            const originalLinkInput = document.getElementById('originalLinkInput');
+            const shortenButton = document.getElementById('shortenButton');
+            const resultArea = document.getElementById('resultArea');
+            const shortLinkOutput = document.getElementById('shortLinkOutput');
+            const copyButton = document.getElementById('copyButton');
+            const errorMessage = document.getElementById('errorMessage');
+
+            // CPM related elements
+            const cpmRatesTableBody = document.querySelector('#cpm-rates-table tbody');
+            const cpmRatesLoading = document.getElementById('cpm-rates-loading');
+            const cpmRatesError = document.getElementById('cpm-rates-error');
+            const cpmRatesTable = document.getElementById('cpm-rates-table');
+
+
+            // Initialize resultArea and errorMessage to hidden state
+            resultArea.classList.add('hidden');
+            errorMessage.classList.add('hidden');
+
+            shortenForm.addEventListener('submit', async (event) => {
+                event.preventDefault(); // Ngăn chặn gửi biểu mẫu mặc định
+
+                const originalLink = originalLinkInput.value.trim(); // Trim whitespace
+                if (!originalLink) {
+                    displayMessage('Vui lòng nhập một URL.', true);
+                    return;
+                }
+
+                // Simple URL validation
+                try {
+                    const url = new URL(originalLink);
+                    // Basic check for http/https protocol
+                    if (!['http:', 'https:'].includes(url.protocol)) {
+                        displayMessage('URL không hợp lệ. Vui lòng nhập URL bắt đầu bằng http:// hoặc https://', true);
+                        return;
+                    }
+                } catch (e) {
+                    displayMessage('URL không hợp lệ. Vui lòng nhập đúng định dạng (ví dụ: https://example.com).', true);
+                    return;
+                }
+
+                // Hiển thị trạng thái tải
+                shortenButton.textContent = 'Đang rút gọn...';
+                shortenButton.disabled = true;
+                resultArea.classList.add('hidden'); // Hide result area
+                resultArea.classList.remove('animate-slideInUp'); // Reset animation
+                errorMessage.classList.add('hidden'); // Hide error message
+
+                try {
+                    // Xây dựng URL backend đầy đủ bằng BASE_SHORT_URL_DOMAIN
+                    const backendApiUrl = BASE_SHORT_URL_DOMAIN + PUBLIC_SHORT_LINK_API_V1_PATH + '/create';
+
+                    const response = await fetch(backendApiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ originalLink: originalLink }),
+                    });
+
+                    const data = await response.json();
+                    // Điều chỉnh logging để chỉ hiển thị status và message, không hiển thị toàn bộ data
+                    console.log('API Response Status:', response.status);
+                    console.log('API Response Message:', data.message);
+
+                    if (response.ok && data.message === WEB_CONSTANTS_BASE_SUCCESS) {
+                        if (data.data && data.data.shortLink) { // Ensure data.data and shortLink exist
+                            const shortCode = data.data.shortLink;
+                            shortLinkOutput.href = shortCode;
+                            shortLinkOutput.textContent = shortCode;
+
+                            // Show result area and trigger animation
+                            resultArea.classList.remove('hidden'); // Make it display: block
+                            void resultArea.offsetWidth; // Force reflow to re-trigger animation
+                            resultArea.classList.add('animate-slideInUp'); // Add animation class back
+
+                            displayMessage('', false); // Clear any previous error
+                        } else {
+                            displayMessage('Phản hồi API không hợp lệ: Thiếu dữ liệu shortLink.', true);
+                        }
+                    } else {
+                        let msg = data.message || 'Đã xảy ra lỗi không xác định.';
+                        if (response.status === 429) { // Quá nhiều yêu cầu
+                            msg = WEB_CONSTANTS_CREATE_LINK_LIMIT;
+                        } else if (response.status === 400) { // Yêu cầu không hợp lệ
+                            msg = data.message || 'URL hoặc yêu cầu không hợp lệ.';
+                        } else if (response.status === 500) { // Internal Server Error
+                            msg = 'Máy chủ gặp lỗi. Vui lòng thử lại sau ít phút.';
+                        }
+                        displayMessage(msg, true);
+                    }
+                } catch (error) {
+                    console.error('Lỗi fetch:', error);
+                    displayMessage('Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng hoặc thử lại.', true);
+                } finally {
+                    shortenButton.textContent = 'Rút gọn URL';
+                    originalLinkInput.value = ''; // Clear input field after attempt
+                    shortenButton.disabled = false;
+                }
+            });
+
+            copyButton.addEventListener('click', () => {
+                const textToCopy = shortLinkOutput.textContent;
+                if (textToCopy) {
+                    // Sử dụng API Clipboard hiện đại nếu có
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(textToCopy).then(() => {
+                            copyButton.textContent = 'Đã sao chép!';
+                            setTimeout(() => {
+                                copyButton.textContent = 'Sao chép liên kết';
+                            }, 2000);
+                        }).catch(err => {
+                            console.error('Không thể sao chép bằng Clipboard API:', err);
+                            fallbackCopyTextToClipboard(textToCopy); // Sử dụng fallback nếu thất bại
+                        });
+                    } else {
+                        // Fallback cho các trình duyệt cũ hơn
+                        fallbackCopyTextToClipboard(textToCopy);
+                    }
+                }
+            });
+
+            function fallbackCopyTextToClipboard(text) {
+                const tempTextArea = document.createElement('textarea');
+                tempTextArea.value = text;
+                // Tránh làm mất vị trí cuộn trên iOS Safari.
+                tempTextArea.style.position = 'fixed';
+                tempTextArea.style.bottom = '0';
+                tempTextArea.style.left = '0';
+                tempTextArea.style.opacity = '0'; // Make it invisible
+                document.body.appendChild(tempTextArea);
+                tempTextArea.focus();
+                tempTextArea.select();
+                try {
+                    document.execCommand('copy');
+                    copyButton.textContent = 'Đã sao chép!';
+                    setTimeout(() => {
+                        copyButton.textContent = 'Sao chép liên kết';
+                    }, 2000);
+                } catch (err) {
+                    console.error('Không thể sao chép bằng execCommand:', err);
+                    alert('Xin lỗi, không thể sao chép tự động. Vui lòng sao chép thủ công: ' + text);
+                } finally {
+                    document.body.removeChild(tempTextArea);
+                }
+            }
+
+            function displayMessage(message, isError) {
+                if (isError) {
+                    errorMessage.textContent = message;
+                    errorMessage.classList.remove('hidden'); // Show error
+                    errorMessage.classList.add('active'); // Trigger error animation if any
+                    resultArea.classList.add('hidden'); // Hide result area
+                    resultArea.classList.remove('active'); // Remove active class
+                } else {
+                    errorMessage.textContent = '';
+                    errorMessage.classList.add('hidden'); // Hide error
+                    errorMessage.classList.remove('active'); // Remove active class
+                }
+            }
+
+            // --- Lấy và hiển thị bảng giá CPM cho trang chính ---
+            async function fetchCpmRatesForIndexPage() {
+                cpmRatesLoading.classList.remove('hidden');
+                cpmRatesError.classList.add('hidden');
+                cpmRatesTable.classList.add('hidden');
+
+                try {
+                    // Chú ý: API /v1/cpm/findall có thể yêu cầu xác thực JWT.
+                    // Trang index.html này không xử lý đăng nhập, nên nếu API yêu cầu token,
+                    // việc này sẽ cần được xử lý ở phía máy chủ hoặc trên một trang dashboard đã đăng nhập.
+                    // Nếu không có token, yêu cầu này có thể thất bại.
+                    // Để minh họa, tôi sẽ gửi yêu cầu mà không có JWT token.
+                    const response = await fetch(`${BASE_SHORT_URL_DOMAIN}/v1/cpm/findall`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                            // 'Authorization': `Bearer ${getJwtToken()}` // Bỏ ghi chú nếu bạn có JWT token
+                        }
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok && result.message === WEB_CONSTANTS_BASE_SUCCESS && result.data) {
+                        cpmRatesTableBody.innerHTML = ''; // Xóa dữ liệu cũ
+                        result.data.forEach(rate => {
+                            const row = cpmRatesTableBody.insertRow();
+                            const countryCell = row.insertCell();
+                            const cpmCell = row.insertCell();
+                            countryCell.textContent = rate.country;
+                            cpmCell.textContent = rate.cpm.toFixed(2); // Định dạng CPM 2 chữ số thập phân
+                        });
+                        cpmRatesTable.classList.remove('hidden');
+                        cpmRatesLoading.classList.add('hidden');
+                    } else {
+                        throw new Error(result.message || 'Lỗi khi lấy dữ liệu CPM.');
+                    }
+                } catch (error) {
+                    console.error('Lỗi lấy CPM Rates cho trang chính:', error);
+                    cpmRatesLoading.classList.add('hidden');
+                    cpmRatesError.textContent = `Không thể tải bảng giá CPM: ${error.message}. Vui lòng thử lại sau.`;
+                    cpmRatesError.classList.remove('hidden');
+                }
+            }
+
+            fetchCpmRatesForIndexPage(); // Gọi hàm để tải CPM rates khi trang được load
+        });
+    </script>
+</body>
+
+</html>

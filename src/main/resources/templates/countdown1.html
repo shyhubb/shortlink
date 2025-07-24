@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cluq - Bước 1: Vui lòng chờ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom CSS from index.html */
+        body {
+            background-image: radial-gradient(circle at top left, rgba(0, 188, 212, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at bottom right, rgba(0, 188, 212, 0.1) 0%, transparent 40%);
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            animation: backgroundShift 20s infinite alternate;
+        }
+
+        @keyframes backgroundShift {
+            0% {
+                background-position: 0% 0%, 100% 100%;
+            }
+
+            100% {
+                background-position: 100% 100%, 0% 0%;
+            }
+        }
+
+        .backdrop-blur-md {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .shine-effect::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: all 0.4s ease-out;
+            will-change: transform;
+        }
+
+        .shine-effect:hover::before {
+            left: 100%;
+        }
+
+        .animate-fadeInScale {
+            animation: fadeInScale 1.5s ease-out forwards;
+            opacity: 0;
+            will-change: transform, opacity;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .animate-fadeIn {
+            animation: fadeIn 2s ease-out 0.5s forwards;
+            opacity: 0;
+            will-change: transform, opacity;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Countdown specific styles */
+        .countdown-container {
+            background-color: #161B22;
+            /* Darker background */
+            border: 1px solid rgba(0, 188, 212, 0.3);
+            /* Teal border */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), inset 0 0 15px rgba(0, 188, 212, 0.1);
+            animation: slideInUp 0.8s ease-out forwards;
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .countdown-text {
+            font-size: 1.5rem;
+            /* text-2xl */
+            font-weight: 600;
+            /* font-semibold */
+            color: #C9D1D9;
+            /* gray-200 */
+        }
+
+        #countdown {
+            font-size: 5rem;
+            /* text-7xl */
+            font-weight: 800;
+            /* font-extrabold */
+            color: #00BCD4;
+            /* teal-400 */
+            text-shadow: 0 0 15px rgba(0, 188, 212, 0.5);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .ad-space {
+            background-color: #0D1117;
+            /* Even darker background for ads */
+            border: 1px dashed rgba(0, 188, 212, 0.2);
+            color: #8B949E;
+            /* Light gray text */
+            transition: all 0.3s ease;
+        }
+
+        .ad-space:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(-3px);
+            border-color: rgba(0, 188, 212, 0.4);
+        }
+
+        .ad-placeholder {
+            background-color: #1A212B;
+            /* Placeholder color */
+            color: #495057;
+            font-weight: 700;
+        }
+
+        /* Responsive Optimization from index.html */
+        @media (max-width: 767px) {
+            body {
+                animation: none;
+                background-image: none;
+            }
+
+            #countdown {
+                font-size: 4rem;
+                /* Smaller on mobile */
+            }
+
+            .countdown-text {
+                font-size: 1.25rem;
+            }
+
+            .ad-space {
+                padding: 15px;
+            }
+
+            .ad-placeholder {
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+
+<body
+    class="font-inter antialiased bg-[#0D1117] text-[#C9D1D9] leading-relaxed flex flex-col min-h-screen items-center justify-center p-4">
+    <header
+        class="bg-[#161B22] bg-opacity-80 backdrop-blur-md py-3 shadow-2xl flex justify-between items-center w-full max-w-screen-xl sticky top-0 z-50 border-b border-teal-600/20 mb-8 rounded-b-xl">
+        <div class="container mx-auto px-4 sm:px-6 flex justify-between items-center w-full">
+            <!-- Đã sửa link href của logo Cluq -->
+            <a th:href="${frontendBaseUrl} + '/index.html'" class="text-4xl sm:text-5xl font-extrabold text-teal-400 no-underline inline-block transition-all duration-300 ease-in-out ml-2 sm:ml-4
+                      hover:text-teal-300 drop-shadow-lg hover:drop-shadow-xl">
+                Cluq
+            </a>
+            <nav class="mr-2 sm:mr-4">
+                <!-- Đã sửa link href của Đăng nhập -->
+                <a th:href="${frontendBaseUrl} + '/login.html'" class="text-sm sm:text-base text-gray-100 no-underline font-semibold ml-4 sm:ml-6 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl transition-all duration-300 ease-in-out relative overflow-hidden shine-effect
+                          hover:text-teal-300 hover:translate-y-[-2px]">
+                    Đăng nhập
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center w-full px-4">
+        <div class="countdown-container max-w-2xl w-full p-8 sm:p-10 rounded-xl text-center shadow-2xl relative">
+            <h1 class="text-3xl sm:text-4xl font-extrabold mb-6 text-teal-300 drop-shadow-md animate-fadeInScale">
+                Đang chuẩn bị liên kết của bạn...
+            </h1>
+            <p class="text-lg sm:text-xl text-gray-400 mb-8 animate-fadeIn">
+                Để đảm bảo an toàn và hỗ trợ dịch vụ, vui lòng chờ trong giây lát. Chúng tôi đang kiểm tra và chuẩn bị
+                liên kết an toàn cho bạn.
+            </p>
+
+            <div class="bg-[#0D1117] p-6 sm:p-8 rounded-xl border border-teal-600/20 mb-8 animate-fadeInScale"
+                style="animation-delay: 0.5s;">
+                <p class="countdown-text mb-4">Liên kết sẽ sẵn sàng trong:</p>
+                <span id="countdown" class="block animate-pulse">10</span>
+            </div>
+
+            <div class="w-full flex justify-center mt-6">
+                <button id="continueButton" disabled
+                    class="bg-gray-600 text-gray-900 px-8 py-4 sm:px-10 sm:py-5 text-lg sm:text-xl font-bold rounded-xl cursor-not-allowed opacity-70 transition-all duration-300 ease-in-out shadow-lg shadow-teal-500/40 relative overflow-hidden shine-effect disabled:bg-gray-600 disabled:shadow-none disabled:cursor-not-allowed">
+                    Vui lòng chờ
+                </button>
+            </div>
+
+            <div class="ad-space p-6 sm:p-8 mt-10 rounded-xl shadow-lg animate-fadeIn" style="animation-delay: 1s;">
+                <h3 class="text-xl sm:text-2xl font-bold text-teal-300 mb-4">Quảng cáo tài trợ</h3>
+                <div
+                    class="ad-placeholder w-full h-32 flex items-center justify-center rounded-lg text-sm sm:text-base mb-4">
+                    Quảng cáo hiển thị tại đây (300x250)
+                </div>
+                <p class="text-gray-500 text-sm sm:text-base">Mỗi lượt xem quảng cáo giúp chúng tôi duy trì dịch vụ miễn
+                    phí này. Cảm ơn sự hỗ trợ của bạn!</p>
+            </div>
+        </div>
+    </main>
+
+    <footer
+        class="bg-[#161B22] py-8 sm:py-10 text-center text-gray-400 text-sm sm:text-base border-t border-teal-600/10 shadow-inner shadow-gray-900/50 w-full mt-8 rounded-t-xl">
+        <div class="container mx-auto px-4 sm:px-5">
+            <p>&copy; <span id="year"></span> Cluq. Mọi quyền được bảo lưu.</p>
+            <script>
+                document.getElementById("year").textContent = new Date().getFullYear();
+            </script>
+            <p>Develope by <a href="https://github.com/shyhubb" class="text-teal-400 hover:text-teal-300">Shyhub</a></p>
+        </div>
+    </footer>
+
+    <script th:inline="javascript">
+        const shortCode = /*[[${shortCode}]]*/ 'default_shortcode';
+        const flowToken = /*[[${flowToken}]]*/ 'default_token';
+
+        let countdownElement = document.getElementById('countdown');
+        let continueButton = document.getElementById('continueButton');
+        let timeLeft = 10; // Đặt thời gian đếm ngược là 10 giây
+
+        function updateCountdown() {
+            countdownElement.textContent = timeLeft;
+            if (timeLeft <= 0) {
+                countdownElement.textContent = '0';
+                continueButton.textContent = 'Tiếp tục';
+                continueButton.disabled = false;
+                // Loại bỏ các class disabled và thêm class kích hoạt
+                continueButton.classList.remove('opacity-70', 'cursor-not-allowed', 'bg-gray-600', 'shadow-none');
+                continueButton.classList.add('bg-teal-500', 'shadow-lg', 'shadow-teal-500/40', 'hover:bg-teal-400');
+            } else {
+                setTimeout(() => {
+                    timeLeft--;
+                    updateCountdown();
+                }, 1000);
+            }
+        }
+
+        continueButton.addEventListener('click', () => {
+            if (!continueButton.disabled) {
+                // Truyền cả shortCode và flowToken đến trang tiếp theo
+                window.location.href = `/countdown2?shortCode=${shortCode}&flowToken=${flowToken}`;
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', updateCountdown);
+    </script>
+</body>
+
+</html>

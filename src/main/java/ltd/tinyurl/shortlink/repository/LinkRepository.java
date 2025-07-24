@@ -20,4 +20,6 @@ public interface LinkRepository extends JpaRepository<Link, Long> {
 
     List<Link> findByUser(User user);
 
+    Optional<Link> findByShortLink(String shortLink);
+
 }

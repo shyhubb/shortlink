@@ -52,6 +52,7 @@ public class PublicShortLinkServiceImpl implements PublicShortLinkService {
 
     @Override
     public String getLink(String shortCode) {
+
         return shortlinkServiceImpl.getLink(shortCode);
     }
 

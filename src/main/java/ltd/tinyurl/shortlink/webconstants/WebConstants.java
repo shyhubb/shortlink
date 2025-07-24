@@ -11,7 +11,9 @@ public class WebConstants {
     public static final String AUTH_API_V1_PATH = API_VERSION_V1 + "/auth";
     public static final String USER_API_V1_PATH = API_VERSION_V1 + "/user";
     public static final String CPMRATE_API_V1_PATH = API_VERSION_V1 + "/cpm";
-    public static final String BASE_SHORT_URL_DOMAIN = "https://cluq.onrender.com/";
+    public static final String BASE_SHORT_URL_DOMAIN = "http://localhost:8080/";
+    public static final String FRONTEND_BASE_URL = "http://127.0.0.1:5500/FE";
+
     public static final String URL_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     public static final int LENGTH_KEY_URL = 6;
     public static final int MAX_ATTEMPTS_GENERATE_KEY = 10;
@@ -22,8 +24,9 @@ public class WebConstants {
     public static final String BASE_FAIL = "Thất bại.";
     public static final String ERROR_SHORTLINK_START_WITH_BASE_URL = "Không được phép rút gọn liên kết gốc server.";
     public static final int ERROR_LENGTH_ACCOUNT = 6;
-    public static final String ERROR_LENGTH_ACCOUNT_MESSAGE = "Tài khoản ít nhất phải đủ 6 kí tự";
+    public static final String ERROR_LENGTH_ACCOUNT_MESSAGE = "Tài khoản ít nhất phải đủ 6 kí tự.";
     public static final String ERROR_SYNTAX_ACCOUNT = "Tài khoản không được chứa kí tự trắng hoặc dấu cách.";
+    public static final String PASSWORD_NOT_CORRECT = "Mật khẩu hiện tại không chính xác.";
 
     public static final String DONT_HAVE_USER_IN_SYSTEM = "Chưa có người dùng nào trong hệ thống.";
     public static final String ERROR_DELETE_THIS_ADMIN = "Không thể xóa tài khoản của bạn.";

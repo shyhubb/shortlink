@@ -4,8 +4,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import lombok.Data;
+import ltd.tinyurl.shortlink.dto.request.ChangePasswordRequest;
 import ltd.tinyurl.shortlink.dto.request.ProfileRequest;
 import ltd.tinyurl.shortlink.dto.response.BaseResponse;
 import ltd.tinyurl.shortlink.dto.response.ManagerUserResponse;
@@ -24,6 +27,8 @@ public class UserServiceImpl implements UserService {
     private final WalletServiceImpl walletServiceImpl;
 
     private final CurrentUserDetails currentUserDetails;
+
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
     public BaseResponse<UserResponse> getProfile() {
@@ -100,12 +105,30 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public BaseResponse<String> deleteById(Long id) {
-        Optional<User> user = userRepository.findById(id);
-        if (!user.isPresent())
-            return new BaseResponse<String>(WebConstants.ACCOUNT_DOES_NOT_EXITS, null);
-        if (id == user.get().getId())
+        Long currentUserId = currentUserDetails.getUserDetails().getId();
+        if (id == currentUserId)
             return new BaseResponse<String>(WebConstants.ERROR_DELETE_THIS_ADMIN, null);
         userRepository.deleteById(id);
+        return new BaseResponse<String>(WebConstants.BASE_SUCCESS, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public BaseResponse<String> changePassword(ChangePasswordRequest changePasswordRequest) {
+        User currentUser = currentUserDetails.getUserDetails();
+        String currentPassword = changePasswordRequest.getCurrentPassword();
+        String newPassword = changePasswordRequest.getNewPassword();
+        String confirmPassword = changePasswordRequest.getConfirmPassword();
+
+        if (!newPassword.equals(confirmPassword))
+            return new BaseResponse(WebConstants.CONFIRM_PASSWORD_NOT_MACTH, null);
+        if (!passwordEncoder.matches(currentPassword, currentUser.getPassword()))
+            return new BaseResponse<String>(WebConstants.PASSWORD_NOT_CORRECT, null);
+
+        currentUser.setPassword(passwordEncoder.encode(newPassword));
+
+        userRepository.save(currentUser);
+
         return new BaseResponse<String>(WebConstants.BASE_SUCCESS, null);
     }
 }

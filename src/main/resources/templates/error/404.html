@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cluq - Lỗi 404: Không tìm thấy trang</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom CSS from index.html (giữ nguyên để đồng bộ giao diện) */
+        body {
+            background-image: radial-gradient(circle at top left, rgba(0, 188, 212, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at bottom right, rgba(0, 188, 212, 0.1) 0%, transparent 40%);
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            animation: backgroundShift 20s infinite alternate;
+        }
+
+        @keyframes backgroundShift {
+            0% {
+                background-position: 0% 0%, 100% 100%;
+            }
+
+            100% {
+                background-position: 100% 100%, 0% 0%;
+            }
+        }
+
+        .backdrop-blur-md {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .shine-effect::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: all 0.4s ease-out;
+            will-change: transform;
+        }
+
+        .shine-effect:hover::before {
+            left: 100%;
+        }
+
+        .animate-fadeInScale {
+            animation: fadeInScale 1.5s ease-out forwards;
+            opacity: 0;
+            will-change: transform, opacity;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .animate-fadeIn {
+            animation: fadeIn 2s ease-out 0.5s forwards;
+            opacity: 0;
+            will-change: transform, opacity;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Error specific styles */
+        .error-container {
+            background-color: #161B22;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            /* Red border for error */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), inset 0 0 15px rgba(255, 0, 0, 0.1);
+            animation: slideInUp 0.8s ease-out forwards;
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 767px) {
+            body {
+                animation: none;
+                background-image: none;
+            }
+
+            .error-container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body
+    class="font-inter antialiased bg-[#0D1117] text-[#C9D1D9] leading-relaxed flex flex-col min-h-screen items-center justify-center p-4">
+    <header
+        class="bg-[#161B22] bg-opacity-80 backdrop-blur-md py-3 shadow-2xl flex justify-between items-center w-full max-w-screen-xl sticky top-0 z-50 border-b border-teal-600/20 mb-8 rounded-b-xl">
+        <div class="container mx-auto px-4 sm:px-6 flex justify-between items-center w-full">
+            <a th:href="${frontendBaseUrl} + '/index.html'" class="text-4xl sm:text-5xl font-extrabold text-teal-400 no-underline inline-block transition-all duration-300 ease-in-out ml-2 sm:ml-4
+                         hover:text-teal-300 drop-shadow-lg hover:drop-shadow-xl">
+                Cluq
+            </a>
+            <nav class="mr-2 sm:mr-4">
+                <a th:href="${frontendBaseUrl} + '/login.html'" class="text-sm sm:text-base text-gray-100 no-underline font-semibold ml-4 sm:ml-6 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl transition-all duration-300 ease-in-out relative overflow-hidden shine-effect
+                                 hover:text-teal-300 hover:translate-y-[-2px]">
+                    Đăng nhập
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center w-full px-4">
+        <div class="error-container max-w-2xl w-full p-8 sm:p-10 rounded-xl text-center shadow-2xl relative">
+            <h1 class="text-5xl sm:text-6xl font-extrabold mb-6 text-red-500 drop-shadow-md animate-fadeInScale">
+                404
+            </h1>
+            <h2 class="text-3xl sm:text-4xl font-extrabold mb-6 text-teal-300 drop-shadow-md animate-fadeInScale"
+                style="animation-delay: 0.2s;">
+                Không tìm thấy trang
+            </h2>
+            <p class="text-lg sm:text-xl text-gray-400 mb-8 animate-fadeIn" style="animation-delay: 0.4s;">
+                Xin lỗi, trang bạn đang tìm kiếm không tồn tại.
+                Có thể liên kết đã bị hỏng hoặc trang đã bị xóa.
+            </p>
+
+            <div class="w-full flex justify-center mt-6 animate-fadeIn" style="animation-delay: 0.6s;">
+                <a th:href="${frontendBaseUrl} + '/index.html'" class="bg-teal-600 text-white px-8 py-4 sm:px-10 sm:py-5 text-lg sm:text-xl font-bold rounded-xl
+                           hover:bg-teal-700 transition-all duration-300 ease-in-out shadow-lg shadow-teal-500/40
+                           relative overflow-hidden shine-effect">
+                    Quay về trang chủ
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer
+        class="bg-[#161B22] py-8 sm:py-10 text-center text-gray-400 text-sm sm:text-base border-t border-teal-600/10 shadow-inner shadow-gray-900/50 w-full mt-8 rounded-t-xl">
+        <div class="container mx-auto px-4 sm:px-5">
+            <p>&copy; <span id="year"></span> Cluq. Mọi quyền được bảo lưu.</p>
+            <script>
+                document.getElementById("year").textContent = new Date().getFullYear();
+            </script>
+            <p>Develope by <a href="https://github.com/shyhubb" class="text-teal-400 hover:text-teal-300">Shyhub</a></p>
+        </div>
+    </footer>
+</body>
+
+</html>

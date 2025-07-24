@@ -3,6 +3,7 @@ package ltd.tinyurl.shortlink.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import lombok.Data;
+import ltd.tinyurl.shortlink.dto.request.ChangePasswordRequest;
 import ltd.tinyurl.shortlink.dto.request.ProfileRequest;
 import ltd.tinyurl.shortlink.dto.response.BaseResponse;
 import ltd.tinyurl.shortlink.dto.response.UserResponse;
@@ -39,6 +40,17 @@ public class UserController {
         if (message.equals(WebConstants.BASE_SUCCESS))
             return new ResponseEntity<BaseResponse>(update, HttpStatus.OK);
         return new ResponseEntity<BaseResponse>(update, HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/account/changepass")
+    public ResponseEntity<BaseResponse> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
+        BaseResponse changePass = userServiceImpl.changePassword(changePasswordRequest);
+        String message = changePass.getMessage();
+
+        if (message.equals(WebConstants.BASE_SUCCESS))
+            return new ResponseEntity<BaseResponse>(changePass, HttpStatus.OK);
+
+        return new ResponseEntity<BaseResponse>(changePass, HttpStatus.BAD_REQUEST);
     }
 
 }
