@@ -1,114 +1,99 @@
-﻿# Link3s Shortlink Service Backend
+# Dự án Rút Gọn Liên Kết (Shortlink Project)
 
-![Java](https://img.shields.io/badge/Java-17-blue)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.5.3-green)
-![Maven](https://img.shields.io/badge/Maven-3.x-red)
-![MySQL](https://img.shields.io/badge/MySQL-8.0-orange)
-![JWT](https://img.shields.io/badge/JWT-Authentication-yellow)
-![Deployed On Render](https://img.shields.io/badge/Deployed%20on-Render-darkgreen)
+Dự án này là một ứng dụng web để rút gọn liên kết, quản lý người dùng, tỷ lệ CPM và ví tiền. Nó cung cấp các API để tạo liên kết rút gọn, quản lý người dùng, và xử lý các giao dịch liên quan đến ví.
 
-Dự án Link3s Shortlink Service là một dịch vụ rút gọn URL mạnh mẽ và linh hoạt, được xây dựng bằng **Spring Boot**. Nó cung cấp các API để tạo, quản lý và chuyển hướng các liên kết rút gọn, hỗ trợ cả người dùng công khai và người dùng đã đăng ký.
+## Tính năng chính
 
----
+* **Rút gọn liên kết:** Tạo các liên kết ngắn từ các URL dài.
+* **Liên kết tùy chỉnh:** Cho phép người dùng tạo các liên kết rút gọn với tên tùy chỉnh.
+* **Quản lý người dùng:** Đăng ký, đăng nhập, quản lý hồ sơ và thay đổi mật khẩu người dùng.
+* **Quản lý quản trị (Admin):** Các chức năng quản lý người dùng và các thiết lập hệ thống cho quản trị viên.
+* **Tỷ lệ CPM:** Quản lý và tính toán tỷ lệ CPM (Cost Per Mille) cho các liên kết.
+* **Quản lý ví:** Theo dõi số dư, giao dịch của người dùng.
+* **API công khai và bảo mật:** Cung cấp các API cho cả truy cập công khai và yêu cầu xác thực.
 
-## 🚀 Tính năng nổi bật
+## Công nghệ sử dụng
 
-* **Rút gọn URL ngẫu nhiên:** Tạo các mã ngắn ngẫu nhiên cho URL dài.
-* **Rút gọn URL tùy chỉnh:** Cho phép người dùng chọn mã ngắn riêng của họ (yêu cầu đăng nhập).
-* **Giới hạn tần suất:** Giới hạn số lượng link tạo theo địa chỉ IP để ngăn chặn lạm dụng.
-* **Xác thực mã ngắn:** Đảm bảo mã tùy chỉnh hợp lệ (ký tự, độ dài) và không xung đột với các đường dẫn nội bộ của hệ thống.
-* **Quản lý link cá nhân:** Người dùng đã đăng ký có thể xem và quản lý các link họ đã tạo.
-* **Xác thực người dùng:** Hệ thống đăng ký/đăng nhập an toàn với **JWT** (JSON Web Tokens).
-* **Chuyển hướng hiệu quả:** Chuyển hướng nhanh chóng từ short link đến original link.
+* **Ngôn ngữ lập trình:** Java
+* **Framework:** Spring Boot
+* **Kiến trúc:** RESTful API
+* **Cơ sở dữ liệu:** (Giả định: MySQL/PostgreSQL hoặc tương tự, cần cấu hình cụ thể)
+* **Công cụ xây dựng:** (Giả định: Maven hoặc Gradle, cần file `pom.xml` hoặc `build.gradle`)
 
----
+## Cấu trúc dự án (Tổng quan)
 
-## 🛠️ Công nghệ sử dụng
+Dự án được tổ chức theo các thành phần chính:
 
-### Backend
+* **Controllers:** Xử lý các yêu cầu HTTP đến, định tuyến và gọi các dịch vụ phù hợp.
+    * `AdminController`, `AuthController`, `CpmRateController`, `GetLinkController`, `PublicShortlinkController`, `ShortlinkController`, `UserController`.
+* **DTOs (Data Transfer Objects):** Các lớp dùng để truyền dữ liệu giữa client và server (Request/Response).
+    * `ChangePasswordRequest`, `CustomLinkRequest`, `LinkRequest`, `LoginRequest`, `ProfileRequest`, `UserRequest`.
+    * `BaseResponse`, `CpmRateResponse`, `CreateLinkResponse`, `LoginResponse`.
+* **Entities:** Đại diện cho các bảng trong cơ sở dữ liệu.
+    * `CpmRate`, `GetLink`, `Link`, `Role`, `User`, `Wallet`.
+* **Services:** Chứa logic nghiệp vụ chính của ứng dụng.
+    * `AuthService`, `CpmRateService`, `GetLinkService`, `PublicShortLinkService`, `ShortlinkService`, `UserService`, `WalletService`.
+* **Constants:** Chứa các hằng số được sử dụng trong ứng dụng.
+    * `WebConstants`.
 
-* **Ngôn ngữ:** Java 17
-* **Framework:** Spring Boot 3.5.3
-* **Quản lý Dependency:** Apache Maven
-* **Cơ sở dữ liệu:** PostgreSQL (có thể cấu hình với MySQL)
-* **ORM:** Spring Data JPA
-* **Bảo mật:** Spring Security, JWT (jjwt-api, jjwt-impl, jjwt-jackson)
-* **Utility:** Project Lombok, Apache Commons Validator
+## Cài đặt và Chạy dự án
 
-### Frontend (Giao diện người dùng)
+Để chạy dự án này trên môi trường phát triển của bạn, hãy làm theo các bước sau:
 
-**Lưu ý:** Phần frontend được gợi ý để xây dựng bằng **HTML, CSS và JavaScript thuần**, sử dụng **Bootstrap 5** cho giao diện.
+1.  **Yêu cầu:**
+    * Java Development Kit (JDK) 11 trở lên.
+    * Maven hoặc Gradle (tùy thuộc vào công cụ xây dựng dự án).
+    * Một hệ quản trị cơ sở dữ liệu (ví dụ: MySQL, PostgreSQL) và một công cụ quản lý cơ sở dữ liệu.
 
----
-
-## 📦 Cấu trúc Dự án
-
-Dự án được tổ chức theo cấu trúc chuẩn của Spring Boot, với các package chính:
-
-* `ltd.tinyurl.shortlink.controller`: Chứa các REST API endpoint.
-* `ltd.tinyurl.shortlink.service`: Chứa logic nghiệp vụ chính của ứng dụng.
-* `ltd.tinyurl.shortlink.repository`: Cung cấp các giao diện truy cập dữ liệu (Spring Data JPA).
-* `ltd.tinyurl.shortlink.entity`: Định nghĩa các lớp Entity ánh xạ tới bảng trong cơ sở dữ liệu.
-* `ltd.tinyurl.shortlink.dto`: Chứa các Data Transfer Object (DTO) cho Request và Response.
-* `ltd.tinyurl.shortlink.webconstants`: Định nghĩa các hằng số được sử dụng trong toàn bộ ứng dụng (đường dẫn API, thông báo lỗi, giới hạn...).
-
----
-
-## 🚀 Bắt đầu (Local Development)
-
-### Yêu cầu
-
-* Java 17 JDK
-* Apache Maven
-* Cơ sở dữ liệu PostgreSQL hoặc MySQL (đảm bảo dịch vụ DB đang chạy)
-
-### Cài đặt
-
-1.  **Clone repository:**
-
+2.  **Clone repository:**
     ```bash
-    git clone [URL_CỦA_REPOSITORY_CỦA_BẠN]
-    cd shortlink
+    git clone <URL_DỰ_ÁN_CỦA_BẠN>
+    cd <TÊN_THƯ_MỤC_DỰ_ÁN>
     ```
 
-2.  **Cấu hình cơ sở dữ liệu:**
-    * Mở file `src/main/resources/application.properties` (hoặc `application.yml`).
-    * Cập nhật thông tin kết nối cơ sở dữ liệu của bạn. Dưới đây là ví dụ cho MySQL:
+3.  **Cấu hình cơ sở dữ liệu:**
+    * Tạo một cơ sở dữ liệu mới cho dự án.
+    * Cập nhật tệp `application.properties` hoặc `application.yml` (trong `src/main/resources`) với thông tin kết nối cơ sở dữ liệu của bạn (URL, username, password).
+    ```properties
+    spring.datasource.url=jdbc:mysql://localhost:3306/your_database_name?useSSL=false&serverTimezone=UTC
+    spring.datasource.username=your_username
+    spring.datasource.password=your_password
+    spring.jpa.hibernate.ddl-auto=update # hoặc none, validate, create
+    spring.jpa.show-sql=true
+    ```
 
-        ```properties
-        # MySQL example
-        spring.datasource.url=jdbc:mysql://localhost:3306/your_database_name?useSSL=false&serverTimezone=UTC
-        spring.datasource.username=your_username
-        spring.datasource.password=your_password
-        spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-        spring.jpa.hibernate.ddl-auto=update # hoặc create để tạo schema tự động
-        spring.jpa.show-sql=true
+4.  **Xây dựng dự án:**
+    * Sử dụng Maven:
+        ```bash
+        mvn clean install
+        ```
+    * Sử dụng Gradle:
+        ```bash
+        gradle clean build
         ```
 
-3.  **Build dự án:**
+5.  **Chạy ứng dụng:**
+    * Sau khi xây dựng thành công, bạn có thể chạy file JAR được tạo ra:
+        ```bash
+        java -jar target/your-project-name.jar # Đối với Maven
+        java -jar build/libs/your-project-name.jar # Đối với Gradle
+        ```
+    * Hoặc chạy trực tiếp từ IDE của bạn (IntelliJ IDEA, Eclipse).
 
-    ```bash
-    mvn clean install
-    ```
+Ứng dụng sẽ chạy trên cổng mặc định 8080 (hoặc cổng bạn cấu hình).
 
-4.  **Chạy ứng dụng:**
+## API Endpoints (Tổng quan)
 
-    ```bash
-    mvn spring-boot:run
-    ```
+Dưới đây là một số ví dụ về các nhóm API có thể có dựa trên tên controllers:
 
-    Hoặc chạy file JAR sau khi build:
+* `/api/auth`: Đăng ký, đăng nhập người dùng.
+* `/api/users`: Quản lý hồ sơ người dùng.
+* `/api/admin`: Các API dành cho quản trị viên (yêu cầu quyền admin).
+* `/api/links`: Tạo, quản lý các liên kết rút gọn.
+* `/api/public/shortlinks`: Rút gọn liên kết công khai.
+* `/api/cpm-rates`: Quản lý tỷ lệ CPM.
+* `/api/get-link`: Truy xuất liên kết gốc từ liên kết rút gọn.
 
-    ```bash
-    java -jar target/shortlink-0.0.1-SNAPSHOT.jar
-    ```
+## Đóng góp
 
-    Ứng dụng sẽ chạy trên cổng mặc định `8080` (hoặc cổng đã cấu hình trong `application.properties`).
-
----
-
-
-
-## 🤝 Đóng góp
-
-Đóng góp luôn được hoan nghênh! Vui lòng fork repository, tạo một nhánh mới cho tính năng của bạn và gửi Pull Request.
+Để đóng góp cho dự án này, vui lòng fork repository và tạo một pull request.
